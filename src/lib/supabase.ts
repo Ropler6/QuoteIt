@@ -22,7 +22,7 @@ const getUserByName = async (name: string) => {
 
 export const login = async (name: string, password: string) => {
     const user = await getUserByName(name);
-    if (user.password === null) return false;
+    if (user === undefined || user === null) return false;
     if (user.password === password) return true;
     return false;
 }
