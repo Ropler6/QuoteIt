@@ -9,7 +9,7 @@ const databaseKey = process.env.SUPABASE_KEY as string;
 const supabaseURL = "https://tacqyqeauhegmfndfbvs.supabase.co"
 const supabase = createClient(supabaseURL, databaseKey);
 
-const getUser = async (name: string) => {
+const getUserByName = async (name: string) => {
     let { data, error } = await supabase
         .from("Users")
         .select("created_at,name,password")
@@ -21,7 +21,7 @@ const getUser = async (name: string) => {
 }
 
 export const login = async (name: string, password: string) => {
-    const user = await getUser(name);
+    const user = await getUserByName(name);
     if (user.password === null) return false;
     if (user.password === password) return true;
     return false;
