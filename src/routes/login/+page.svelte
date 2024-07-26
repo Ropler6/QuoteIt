@@ -1,10 +1,13 @@
 <script lang="ts" defer>
+    import { goto } from "$app/navigation";
     import Header from "../../Components/Header.svelte"
     import type { ActionData } from "./$types";
-    import type { PageData } from "./$types";
+    import { browser } from "$app/environment";
 
-    // export let data: PageData;
     export let form: ActionData;
+    if (form?.success)
+        if (browser)
+            goto("/app");
 </script>
 
 <Header/>
@@ -22,8 +25,8 @@
         <button type="submit">Submit</button>
     </form>
 
-    {#if form?.success}
-        <p>Successfully logged in as {form.user}</p>
+    {#if form?.success === false}
+        <p>Incorrect username or password!</p>
     {/if}
 
 </main>
