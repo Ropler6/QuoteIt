@@ -1,5 +1,5 @@
 import type { Actions } from "./$types";
-import { addSingleQuote } from "$lib/supabase";
+import { addSingleQuote } from "$lib/server/supabase";
 
 export const actions = {
     addQuote: async ({ cookies, request }) => {
@@ -9,8 +9,8 @@ export const actions = {
 
         const result = await addSingleQuote(user, text);
         if (result === null) return { success: false };
-
-        return { success: true };
+        
+        return { quote: result.quote, ownership: result.ownership, success: true };
     },
 
 } satisfies Actions
