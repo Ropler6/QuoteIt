@@ -1,6 +1,6 @@
 
 import { createClient } from '@supabase/supabase-js'
-import type { User } from '$lib/datatypes';
+import type { Quote, QuoteOwnership, User } from '$lib/datatypes';
 import dotenv from "dotenv"
 
 dotenv.config();
@@ -9,20 +9,59 @@ const databaseKey = process.env.SUPABASE_KEY as string;
 const supabaseURL = "https://tacqyqeauhegmfndfbvs.supabase.co"
 const supabase = createClient(supabaseURL, databaseKey);
 
-const getUserByName = async (name: string) => {
-    let { data, error } = await supabase
+const _getUserByName = async (name: string) => {
+    const { data, error } = await supabase
         .from("Users")
-        .select("created_at,name,password")
+        .select("*")
         .eq("name", name);
 
-    if (error) return {} as User;
-    if (data === null) return {} as User;
+    if (error) return null;
+    if (data === null) return null;
     return data[0] as User;
 }
 
+const _addQuote = async (text: string) => {
+    const { data, error } = await supabase
+        .from("Quotes")
+        .insert([
+            { createdAt: new Date(), text }
+        ])
+        .select();
+
+    if (error) return null;
+    if (data === null) return null;
+    return data[0] as Quote;
+}
+
+const _addQuoteOwnership = async (user: User, quote: Quote) => {
+    const { data, error } = await supabase
+        .from("Quote_Ownership")
+        .insert([
+            { userId: user.id, quoteId: quote.id }
+        ])
+        .select();
+
+    if (error) return null;
+    if (data === null) return null;
+    return data[0] as QuoteOwnership;
+}
+
+export const addSingleQuote = async (user: string, text: string) => {
+    const username = await _getUserByName(user);
+    if (username === null) return null;
+
+    const quote = await _addQuote(text);
+    if (quote === null) return null;
+
+    const ownership = await _addQuoteOwnership(username, quote);
+    if (ownership === null) return null;
+
+    return { quote, ownership };
+}
+
 export const login = async (name: string, password: string) => {
-    const user = await getUserByName(name);
-    if (user === undefined || user === null) return false;
+    const user = await _getUserByName(name);
+    if (user === null) return false;
     if (user.password === password) return true;
     return false;
 }
