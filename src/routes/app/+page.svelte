@@ -24,7 +24,7 @@
 
     {#if data?.success && data.quotes != null && data.user != null}
         {#each data.quotes as quote}
-            <Quote content={quote.text} authors={[data.user]} createdAt={quote.createdAt} />
+            <Quote quote={quote} authors={[data.user]}/>
         {/each}
     {:else}
         <p>Could not fetch quotes!</p>
