@@ -1,5 +1,5 @@
 import type { Actions, PageServerLoad } from "./$types";
-import { addSingleQuote, getQuotesFromUser } from "$lib/server/supabase";
+import { addSingleQuote, getQuotesFromUser, removeSingleQuote } from "$lib/server/supabase";
 
 export const load: PageServerLoad = async ({ cookies }) => {
     const userCookie = cookies.get("user") as string;
@@ -21,5 +21,13 @@ export const actions = {
         
         return { quote: result.quote, ownership: result.ownership, success: true };
     },
+
+    removeQuote: async ({ request }) => {
+        const jsonData = await request.json();
+        const quoteId: number = jsonData.quoteId;
+
+        const response = await removeSingleQuote(quoteId);
+        return { success: response };
+    }
 
 } satisfies Actions

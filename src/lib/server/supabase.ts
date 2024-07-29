@@ -98,6 +98,21 @@ export const addSingleQuote = async (user: string, text: string) => {
     return { quote, ownership };
 }
 
+export const removeSingleQuote = async (quoteId: number) => {
+    const quotesResponse = await supabase
+        .from("Quotes")
+        .delete()
+        .eq("id", quoteId);
+
+    const ownershipResponse = await supabase
+        .from("QuoteOwnerships")
+        .delete()
+        .eq("quoteId", quoteId);
+
+    if (quotesResponse.error || ownershipResponse.error) return false;
+    return true;
+}
+
 export const login = async (name: string, password: string) => {
     const user = await _getUserByName(name);
     if (user === null) return false;
