@@ -1,6 +1,6 @@
 
 import { createClient } from '@supabase/supabase-js'
-import type { Quote, QuoteOwnership, User } from '$lib/datatypes';
+import type { Quote_T, QuoteOwnership_T, User_T } from '$lib/datatypes';
 import dotenv from "dotenv"
 
 dotenv.config();
@@ -17,7 +17,7 @@ const _getUserByName = async (name: string) => {
 
     if (error) return null;
     if (data === null) return null;
-    return data[0] as User;
+    return data[0] as User_T;
 }
 
 const _addQuote = async (text: string) => {
@@ -30,10 +30,10 @@ const _addQuote = async (text: string) => {
 
     if (error) return null;
     if (data === null) return null;
-    return data[0] as Quote;
+    return data[0] as Quote_T;
 }
 
-const _addQuoteOwnership = async (user: User, quote: Quote) => {
+const _addQuoteOwnership = async (user: User_T, quote: Quote_T) => {
     const { data, error } = await supabase
         .from("Quote_Ownership")
         .insert([
@@ -43,7 +43,46 @@ const _addQuoteOwnership = async (user: User, quote: Quote) => {
 
     if (error) return null;
     if (data === null) return null;
-    return data[0] as QuoteOwnership;
+    return data[0] as QuoteOwnership_T;
+}
+
+const _getQuotesFromUser = async(user: User_T, limit: number = 50) => {
+    const { data: quoteIds, error: error1 } = await supabase
+        .from("Quote_Ownership")
+        .select("quoteId")
+        .eq("userId", user.id);
+
+    if (error1) return null;
+    if (quoteIds === null) return null;
+    const ids: number[] = quoteIds.map(a => a.quoteId);
+
+    let quotes: Quote_T[] = []
+
+    for (const id of ids) {
+        const { data, error } = await supabase
+            .from("Quotes")
+            .select("*")
+            .eq("id", id);
+
+        if (!error && data !== null)
+            quotes.push({
+                id: data[0].id,
+                text: data[0].text,
+                createdAt: new Date(data[0].createdAt),
+            });
+    }
+
+    return quotes;
+}
+
+export const getQuotesFromUser = async (_user: string) => {
+    const user = await _getUserByName(_user);
+    if (user === null) return null;
+
+    return {
+        quotes: await _getQuotesFromUser(user),
+        user
+    }
 }
 
 export const addSingleQuote = async (user: string, text: string) => {
