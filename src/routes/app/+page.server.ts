@@ -1,5 +1,14 @@
-import type { Actions } from "./$types";
-import { addSingleQuote } from "$lib/server/supabase";
+import type { Actions, PageServerLoad } from "./$types";
+import { addSingleQuote, getQuotesFromUser } from "$lib/server/supabase";
+
+export const load: PageServerLoad = async ({ cookies }) => {
+    const userCookie = cookies.get("user") as string;
+    const response = await getQuotesFromUser(userCookie);
+    if (response === null) return { success: false };
+    if (response.quotes === null) response.quotes = [];
+
+    return { success: true, user: response.user, quotes: response.quotes };
+}
 
 export const actions = {
     addQuote: async ({ cookies, request }) => {
