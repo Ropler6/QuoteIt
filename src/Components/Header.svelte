@@ -1,10 +1,13 @@
 <script lang="ts">
-    
+    import menu from "/src/assets/menu.svg"
+    import tags from "/src/assets/tags.svg"
+
+
 </script>
 
 <main>
-    <a href="/groups">
-        <img src="static/folder.svg" alt="Groups">
+    <a href="/tags">
+        <img src={tags} width="35" height="35" alt="Tags">
     </a>
     
     <div class="title">
@@ -12,7 +15,7 @@
     </div>
     
     <a href="/menu" class="menu">
-        <img src="static/menu.svg" alt="Menu">
+        <img src={menu} width="35" height="35" alt="Menu">
     </a>
 
 </main>
