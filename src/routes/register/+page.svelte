@@ -2,6 +2,7 @@
     import { goto } from "$app/navigation";
     import Header from "../../Components/Header.svelte"
     import { browser } from "$app/environment";
+    import Notification from "../../Components/Notification.svelte";
 
     let diffPasswords = false;
     let userExists = true;
@@ -60,11 +61,11 @@
     </form>
 
     {#if userExists === false}
-        <p>The username is already taken!</p>
+        <Notification text={"The username is already taken!"}/>
     {/if}
 
     {#if diffPasswords}
-        <p>The two passwords are different!</p>
+        <Notification text={"The two passwords are different!"}/>
     {/if}
 
 </main>

@@ -4,6 +4,7 @@
     import Quote from "../../Components/Quote.svelte";
     import type { ActionData } from "./$types";
     import type { Quote_T } from "$lib/datatypes";
+    import Notification from "../../Components/Notification.svelte";
 
     export let form: ActionData;
     export let data: PageData;
@@ -38,7 +39,7 @@
 
         <button type="submit">Add quote</button>
         {#if form?.success}
-            <p>Quote added successfully to the database!</p>
+            <Notification text={"Quote added successfully to the database!"}/>
         {/if}
     </form>
 
@@ -47,7 +48,7 @@
             <Quote quote={quote} authors={[data.user]} on:destroy={onQuoteDelete}/>
         {/each}
     {:else}
-        <p>Could not fetch quotes!</p>
+        <Notification text={"Could not fetch quotes!"}/>
     {/if}
 
 </main>

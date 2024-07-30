@@ -3,6 +3,7 @@
     import Header from "../../Components/Header.svelte"
     import type { ActionData } from "./$types";
     import { browser } from "$app/environment";
+    import Notification from "../../Components/Notification.svelte";
 
     export let form: ActionData;
     if (form?.success)
@@ -26,7 +27,7 @@
     </form>
 
     {#if form?.success === false}
-        <p>Incorrect username or password!</p>
+        <Notification text={"Incorrect username or password!"}/>
     {/if}
 
 </main>

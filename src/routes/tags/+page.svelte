@@ -3,6 +3,7 @@
     import Header from "../../Components/Header.svelte";
     import type { ActionData } from "./$types"
     import Tag from "../../Components/Tag.svelte";
+    import Notification from "../../Components/Notification.svelte";
 
     export let form: ActionData;
     export let data: PageData;
@@ -20,7 +21,7 @@
     </form>
 
     {#if form?.success}
-        <p>Tag created successfully!</p>
+        <Notification text={"Tag created successfully!"}/>
     {/if}
 
     {#if data?.success && data?.tags}
