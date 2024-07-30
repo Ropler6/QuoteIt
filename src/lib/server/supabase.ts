@@ -16,7 +16,7 @@ const _getUserByName = async (name: string) => {
         .eq("name", name);
 
     if (error) return null;
-    if (data === null) return null;
+    if (data === null || !data[0]) return null;
     return data[0] as User_T;
 }
 
@@ -110,6 +110,23 @@ export const removeSingleQuote = async (quoteId: number) => {
         .eq("quoteId", quoteId);
 
     if (quotesResponse.error || ownershipResponse.error) return false;
+    return true;
+}
+
+export const register = async (name: string, password: string) => {
+    const user = await _getUserByName(name);
+    if (user !== null) return false;
+
+    const { error } = await supabase
+        .from("Users")
+        .insert([{
+            name,
+            password,
+            createdAt: new Date(),
+        }])
+        .select();
+
+    if (error) return false;
     return true;
 }
 
