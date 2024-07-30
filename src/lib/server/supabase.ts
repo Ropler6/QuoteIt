@@ -1,7 +1,8 @@
 
 import { createClient } from '@supabase/supabase-js'
-import type { Quote_T, QuoteOwnership_T, User_T } from '$lib/datatypes';
+import type { Quote_T, QuoteOwnership_T, Tag_T, TagMembership_T, User_T } from '$lib/datatypes';
 import dotenv from "dotenv"
+import { randomUUID } from "crypto"
 
 dotenv.config();
 const anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRhY3F5cWVhdWhlZ21mbmRmYnZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjE4MDk4NTgsImV4cCI6MjAzNzM4NTg1OH0.SP8zioSTEvPQrAOlJdrwiCQSwl1RKmqGQuzZwpI1X8o"
@@ -75,6 +76,65 @@ const _getQuotesFromUser = async(user: User_T, limit: number = 50) => {
     return quotes;
 }
 
+const _addTagMembership = async (user: User_T, tag: Tag_T) => {
+    const { data, error } = await supabase
+        .from("TagMemberships")
+        .insert([{
+            userId: user.id,
+            tagId: tag.id,
+        }])
+        .select();
+
+    if (error) return null;
+    return data[0];
+}
+
+const _addTag = async (user: User_T, tagName: string) => {
+    const { data, error } = await supabase
+        .from("Tags")
+        .insert([{
+            hash: randomUUID(),
+            createdAt: new Date(),
+            creatorId: user.id,
+            name: tagName,
+        }])
+        .select();
+
+    if (error) return null;
+    return data[0];
+}
+
+const _getTagsForUser = async (user: User_T) => {
+    const { data: tagIds, error: error1 } = await supabase
+        .from("TagMemberships")
+        .select("tagId")
+        .eq("userId", user.id);
+
+    if (error1) return null;
+    if (tagIds === null) return null;
+    const ids: number[] = tagIds.map(a => a.tagId);
+
+    let tags: Tag_T[] = []
+
+    for (const id of ids) {
+        const { data, error } = await supabase
+            .from("Tags")
+            .select("*")
+            .eq("id", id);
+
+        if (!error && data !== null)
+            tags.push({
+                id: data[0].id,
+                hash: data[0].hash,
+                createdAt: new Date(data[0].createdAt),
+                creatorId: data[0].creatorId,
+                name: data[0].name,
+            });
+    }
+
+    return tags;
+}
+
 export const getQuotesFromUser = async (_user: string) => {
     const user = await _getUserByName(_user);
     if (user === null) return null;
@@ -111,6 +171,24 @@ export const removeSingleQuote = async (quoteId: number) => {
 
     if (quotesResponse.error || ownershipResponse.error) return false;
     return true;
+}
+
+export const addTag = async (_user: string, tagname: string) => {
+    const user = await _getUserByName(_user);
+    if (user === null) return null;
+
+    const tag: Tag_T = await _addTag(user, tagname);
+    const tagMembership: TagMembership_T = await _addTagMembership(user, tag);
+
+    return { tag, tagMembership };
+}
+
+export const getTagsForUser = async (_user: string) => {
+    const user = await _getUserByName(_user);
+    if (user === null) return null;
+
+    const tags = await _getTagsForUser(user);
+    return tags;
 }
 
 export const register = async (name: string, password: string) => {

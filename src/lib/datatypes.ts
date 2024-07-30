@@ -14,6 +14,20 @@ export interface Quote_T {
 
 export interface QuoteOwnership_T {
     id: number;
-    userId: number;
     quoteId: number;
+    creatorId: number;
+}
+
+export interface Tag_T {
+    id: number;
+    hash: string;
+    createdAt: Date;
+    name: string;
+    creatorId: number;
+}
+
+export interface TagMembership_T {
+    id: number;
+    tagId: number;
+    userId: number;
 }
