@@ -38,7 +38,7 @@ const _addQuoteOwnership = async (user: User_T, quote: Quote_T) => {
     const { data, error } = await supabase
         .from("QuoteOwnerships")
         .insert([
-            { userId: user.id, quoteId: quote.id }
+            { creatorId: user.id, quoteId: quote.id }
         ])
         .select();
 
@@ -51,7 +51,7 @@ const _getQuotesFromUser = async(user: User_T, limit: number = 50) => {
     const { data: quoteIds, error: error1 } = await supabase
         .from("QuoteOwnerships")
         .select("quoteId")
-        .eq("userId", user.id);
+        .eq("creatorId", user.id);
 
     if (error1) return null;
     if (quoteIds === null) return null;
