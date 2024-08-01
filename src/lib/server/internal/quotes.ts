@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import type { Quote_T, User_T, QuoteOwnership_T } from "$lib/datatypes";
+import type { Quote_T, User_T, QuoteMention_T } from "$lib/datatypes";
 
 export const _addQuote = async (text: string) => {
     const { data, error } = await supabase
@@ -14,24 +14,24 @@ export const _addQuote = async (text: string) => {
     return data[0] as Quote_T;
 }
 
-export const _addQuoteOwnership = async (user: User_T, quote: Quote_T) => {
+export const _addQuoteMention = async (user: User_T, quote: Quote_T) => {
     const { data, error } = await supabase
-        .from("QuoteOwnerships")
+        .from("QuoteMentions")
         .insert([
-            { creatorId: user.id, quoteId: quote.id }
+            { userId: user.id, quoteId: quote.id }
         ])
         .select();
 
     if (error) return null;
     if (data === null) return null;
-    return data[0] as QuoteOwnership_T;
+    return data[0] as QuoteMention_T;
 }
 
 export const _getQuotesFromUser = async(user: User_T, limit: number = 50) => {
     const { data: quoteIds, error: error1 } = await supabase
-        .from("QuoteOwnerships")
+        .from("QuoteMentions")
         .select("quoteId")
-        .eq("creatorId", user.id);
+        .eq("userId", user.id);
 
     if (error1) return null;
     if (quoteIds === null) return null;

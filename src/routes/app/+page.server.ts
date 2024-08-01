@@ -19,7 +19,7 @@ export const actions = {
         const result = await addSingleQuote(user, text);
         if (result === null) return { success: false };
         
-        return { quote: result.quote, ownership: result.ownership, success: true };
+        return { quote: result.quote, mention: result.mention, success: true };
     },
 
     removeQuote: async ({ request }) => {

@@ -12,10 +12,10 @@ export interface Quote_T {
     text: string;
 }
 
-export interface QuoteOwnership_T {
+export interface QuoteMention_T {
     id: number;
     quoteId: number;
-    creatorId: number;
+    userId: number;
 }
 
 export interface Tag_T {

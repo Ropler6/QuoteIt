@@ -1,6 +1,6 @@
 import { supabase } from "../internal/supabase";
 import { _getUserByName } from "../internal/auth";
-import { _getQuotesFromUser, _addQuote, _addQuoteOwnership } from "../internal/quotes";
+import { _getQuotesFromUser, _addQuote, _addQuoteMention } from "../internal/quotes";
 
 export const getQuotesFromUser = async (_user: string) => {
     const user = await _getUserByName(_user);
@@ -19,10 +19,10 @@ export const addSingleQuote = async (user: string, text: string) => {
     const quote = await _addQuote(text);
     if (quote === null) return null;
 
-    const ownership = await _addQuoteOwnership(username, quote);
-    if (ownership === null) return null;
+    const mention = await _addQuoteMention(username, quote);
+    if (mention === null) return null;
 
-    return { quote, ownership };
+    return { quote, mention };
 }
 
 export const removeSingleQuote = async (quoteId: number) => {
@@ -32,7 +32,7 @@ export const removeSingleQuote = async (quoteId: number) => {
         .eq("id", quoteId);
 
     const ownershipResponse = await supabase
-        .from("QuoteOwnerships")
+        .from("QuoteMentions")
         .delete()
         .eq("quoteId", quoteId);
 
