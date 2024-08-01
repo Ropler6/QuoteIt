@@ -1,9 +1,9 @@
 <script lang="ts" defer>
     import { goto } from "$app/navigation";
-    import Header from "../../Components/Header.svelte"
+    import Header from "$lib/components/Header.svelte"
     import type { ActionData } from "./$types";
     import { browser } from "$app/environment";
-    import Notification from "../../Components/Notification.svelte";
+    import Notification from "$lib/components/Notification.svelte";
 
     export let form: ActionData;
     if (form?.success)

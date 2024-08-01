@@ -1,10 +1,10 @@
 <script lang="ts">
     import type { PageData } from "./$types";
-    import Header from "../../Components/Header.svelte";
-    import Quote from "../../Components/Quote.svelte";
+    import Header from "$lib/components/Header.svelte";
+    import Quote from "$lib/components/Quote.svelte";
     import type { ActionData } from "./$types";
     import type { Quote_T } from "$lib/datatypes";
-    import Notification from "../../Components/Notification.svelte";
+    import Notification from "$lib/components/Notification.svelte";
 
     export let form: ActionData;
     export let data: PageData;

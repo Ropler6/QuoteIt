@@ -1,5 +1,5 @@
 import type { Actions, PageServerLoad } from "./$types";
-import { addSingleQuote, getQuotesFromUser, removeSingleQuote } from "$lib/server/supabase";
+import { addSingleQuote, getQuotesFromUser, removeSingleQuote } from "$lib/server/external/quotes";
 
 export const load: PageServerLoad = async ({ cookies }) => {
     const userCookie = cookies.get("user") as string;

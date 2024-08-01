@@ -1,9 +1,9 @@
 <script lang="ts">
     import type { PageData } from "./$types";
-    import Header from "../../Components/Header.svelte";
+    import Header from "$lib/components/Header.svelte";
     import type { ActionData } from "./$types"
-    import Tag from "../../Components/Tag.svelte";
-    import Notification from "../../Components/Notification.svelte";
+    import Tag from "$lib/components/Tag.svelte";
+    import Notification from "$lib/components/Notification.svelte";
 
     export let form: ActionData;
     export let data: PageData;

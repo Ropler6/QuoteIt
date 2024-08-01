@@ -1,5 +1,5 @@
 import type { Actions } from "./$types";
-import { register } from "$lib/server/supabase";
+import { register } from "$lib/server/external/auth";
 
 export const actions = {
     register: async ({ cookies, request }) => {

@@ -1,4 +1,4 @@
-import { addTag, getTagsForUser } from "$lib/server/supabase";
+import { addTag, getTagsForUser } from "$lib/server/external/tags";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ cookies, request }) => {
