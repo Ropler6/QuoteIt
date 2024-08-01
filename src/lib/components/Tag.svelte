@@ -1,14 +1,14 @@
 <script lang="ts">
     import type { Tag_T } from "$lib/datatypes"
+    import VisibleOnHover from "./VisibleOnHover.svelte";
 
     export let tag: Tag_T;
-    let visibility: "visible" | "hidden" = "hidden";
 </script>
 
 
-<main on:mouseenter={() => visibility = "visible"}
-      on:mouseleave={() => visibility = "hidden"}>
-    <p>{tag.name}</p>
-    <p style:visibility>hash: {tag.hash}</p>
-</main>
+<p>{tag.name}</p>
+<VisibleOnHover>
+    <p>hash: {tag.hash}</p>
+</VisibleOnHover>
+
 
