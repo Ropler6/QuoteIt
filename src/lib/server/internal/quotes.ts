@@ -1,6 +1,12 @@
 import { supabase } from "./supabase";
-import type { Quote_T, User_T, QuoteMention_T } from "$lib/datatypes";
+import type { Quote_T, QuoteMention_T } from "$lib/datatypes";
 
+/**
+ * Internal function for adding a quote to the database
+ * @param creatorId The ID of the `user` that made the quote`
+ * @param text The text content of the `quote`
+ * @returns The `quote` that has been added to the database or null
+ */
 export const _addQuote = async (creatorId: number, text: string) => {
     const { data, error } = await supabase
         .from("Quotes")
@@ -14,6 +20,12 @@ export const _addQuote = async (creatorId: number, text: string) => {
     return data[0] as Quote_T;
 }
 
+/**
+ * Internal function for adding a `quoteMention` to the database
+ * @param userId The ID of the `user` mentioned in the quote
+ * @param quoteId The ID of the `quote`
+ * @returns The `quoteMention` object
+ */
 export const _addQuoteMention = async (userId: number, quoteId: number) => {
     const { data, error } = await supabase
         .from("QuoteMentions")
@@ -27,6 +39,12 @@ export const _addQuoteMention = async (userId: number, quoteId: number) => {
     return data[0] as QuoteMention_T;
 }
 
+/**
+ * Internal function for fetching the `quote`s created by an `user` from the database
+ * @param userId The ID of the `user`
+ * @param limit How many quotes should be removed
+ * @returns An array of `quote`s
+ */
 export const _getQuotesFromUser = async(userId: number, limit: number = 50) => {
     const { data, error } = await supabase
         .from("QuoteMentions")

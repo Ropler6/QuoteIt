@@ -2,6 +2,12 @@ import { supabase } from "./supabase";
 import type { User_T, Tag_T, TagMembership_T } from "$lib/datatypes";
 import { randomUUID } from "crypto"
 
+/**
+ * Internal function for adding a `tagMembership` for an `user`
+ * @param userId The ID of the `user`
+ * @param tagId The ID of the `tag`
+ * @returns The `tagMembership` object
+ */
 export const _addTagMembership = async (userId: number, tagId: number) => {
     const { data, error } = await supabase
         .from("TagMemberships")
@@ -15,6 +21,12 @@ export const _addTagMembership = async (userId: number, tagId: number) => {
     return data[0] as TagMembership_T;
 }
 
+/**
+ * Internal function for adding a `tag` to the database 
+ * @param userId The ID of the `user`
+ * @param tagName The name of the `tag`
+ * @returns The `tag` object
+ */
 export const _addTag = async (userId: number, tagName: string) => {
     const { data, error } = await supabase
         .from("Tags")
@@ -30,6 +42,11 @@ export const _addTag = async (userId: number, tagName: string) => {
     return data[0] as Tag_T;
 }
 
+/**
+ * Internal function for getting all `tag`s associated with an `user`
+ * @param userId The ID of the user
+ * @returns The `tag` object
+ */
 export const _getTagsForUser = async (userId: number) => {
     const { data, error } = await supabase
         .from("TagMemberships")
