@@ -3,7 +3,7 @@
     import { createEventDispatcher } from "svelte";
 
     export let quote: Quote_T;
-    export let authors: User_T[] = [];
+    export let mentions: User_T[] = [];
     const dispatch = createEventDispatcher();
 
     const removeQuote = async () => {
@@ -16,7 +16,7 @@
         const success = JSON.parse(json.data)[0].success;
 
         if (success) {
-            dispatch("destroy", { quote, authors });
+            dispatch("destroy", { quote, mentions });
         }
     }
 
@@ -25,7 +25,7 @@
 <main>
     <p>{quote.text}</p>
     <p>by
-        {#each authors as author}
+        {#each mentions as author}
             {author.name}
         {/each}
     </p>

@@ -45,7 +45,7 @@
 
     {#if data?.success && data.quotes != null && data.user != null}
         {#each data.quotes as quote}
-            <Quote quote={quote} authors={[data.user]} on:destroy={onQuoteDelete}/>
+            <Quote quote={quote} mentions={[data.user]} on:destroy={onQuoteDelete}/>
         {/each}
     {:else}
         <Notification text={"Could not fetch quotes!"}/>
