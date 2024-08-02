@@ -1,5 +1,5 @@
 import { supabase } from "../internal/supabase";
-import { _getUserByName } from "../internal/auth";
+import { _getUserByName } from "../internal/utils";
 
 export const register = async (name: string, password: string) => {
     const user = await _getUserByName(name);

@@ -1,5 +1,5 @@
 import { supabase } from "../internal/supabase";
-import { _getUserByName } from "../internal/auth";
+import { _getUserByName } from "../internal/utils";
 import { _getQuotesFromUser, _addQuote, _addQuoteMention } from "../internal/quotes";
 
 export const getQuotesFromUser = async (_user: string) => {
@@ -12,14 +12,14 @@ export const getQuotesFromUser = async (_user: string) => {
     }
 }
 
-export const addSingleQuote = async (user: string, text: string) => {
-    const username = await _getUserByName(user);
-    if (username === null) return null;
+export const addSingleQuote = async (_user: string, text: string) => {
+    const user = await _getUserByName(_user);
+    if (user === null) return null;
 
-    const quote = await _addQuote(text);
+    const quote = await _addQuote(user.id, text);
     if (quote === null) return null;
 
-    const mention = await _addQuoteMention(username, quote);
+    const mention = await _addQuoteMention(user, quote);
     if (mention === null) return null;
 
     return { quote, mention };

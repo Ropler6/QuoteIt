@@ -1,11 +1,11 @@
 import { supabase } from "./supabase";
 import type { Quote_T, User_T, QuoteMention_T } from "$lib/datatypes";
 
-export const _addQuote = async (text: string) => {
+export const _addQuote = async (creatorId: number, text: string) => {
     const { data, error } = await supabase
         .from("Quotes")
         .insert([
-            { createdAt: new Date(), text }
+            { createdAt: new Date(), text, creatorId }
         ])
         .select();
 
@@ -50,6 +50,7 @@ export const _getQuotesFromUser = async(user: User_T, limit: number = 50) => {
                 id: data[0].id,
                 text: data[0].text,
                 createdAt: new Date(data[0].createdAt),
+                creatorId: user.id,
             });
     }
 

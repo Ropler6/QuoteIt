@@ -10,6 +10,7 @@ export interface Quote_T {
     id: number;
     createdAt: Date;
     text: string;
+    creatorId: number;
 }
 
 export interface QuoteMention_T {
