@@ -31,32 +31,13 @@ export const _addTag = async (user: User_T, tagName: string) => {
 }
 
 export const _getTagsForUser = async (user: User_T) => {
-    const { data: tagIds, error: error1 } = await supabase
+    const { data, error } = await supabase
         .from("TagMemberships")
-        .select("tagId")
+        .select("Tags(*)")
         .eq("userId", user.id);
 
-    if (error1) return null;
-    if (tagIds === null) return null;
-    const ids: number[] = tagIds.map(a => a.tagId);
-
-    let tags: Tag_T[] = []
-
-    for (const id of ids) {
-        const { data, error } = await supabase
-            .from("Tags")
-            .select("*")
-            .eq("id", id);
-
-        if (!error && data !== null)
-            tags.push({
-                id: data[0].id,
-                hash: data[0].hash,
-                createdAt: new Date(data[0].createdAt),
-                creatorId: data[0].creatorId,
-                name: data[0].name,
-            });
-    }
+    if (error) return null;
+    const tags = data.map(x => x.Tags);
 
     return tags;
 }

@@ -28,30 +28,16 @@ export const _addQuoteMention = async (user: User_T, quote: Quote_T) => {
 }
 
 export const _getQuotesFromUser = async(user: User_T, limit: number = 50) => {
-    const { data: quoteIds, error: error1 } = await supabase
+    const { data, error } = await supabase
         .from("QuoteMentions")
-        .select("quoteId")
+        .select("Quotes(*)")
         .eq("userId", user.id);
 
-    if (error1) return null;
-    if (quoteIds === null) return null;
-    const ids: number[] = quoteIds.map(a => a.quoteId);
-
-    let quotes: Quote_T[] = []
-
-    for (const id of ids) {
-        const { data, error } = await supabase
-            .from("Quotes")
-            .select("*")
-            .eq("id", id);
-
-        if (!error && data !== null)
-            quotes.push({
-                id: data[0].id,
-                text: data[0].text,
-                createdAt: new Date(data[0].createdAt),
-                creatorId: user.id,
-            });
+    if (error) return null;
+    
+    const quotes = data.map(x => x.Quotes);
+    for (let quote of quotes) {
+        (quote as any).createdAt = new Date((quote as any).createdAt);
     }
 
     return quotes;
