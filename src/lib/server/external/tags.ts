@@ -8,8 +8,11 @@ export const addTag = async (_user: string, tagname: string) => {
     const user = await _getUserByName(_user);
     if (user === null) return null;
 
-    const tag: Tag_T = await _addTag(user, tagname);
-    const tagMembership: TagMembership_T = await _addTagMembership(user, tag);
+    const tag = await _addTag(user, tagname);
+    if (tag === null) return null;
+
+    const tagMembership = await _addTagMembership(user, tag);
+    if (tagMembership === null) return null;
 
     return { tag, tagMembership };
 }

@@ -35,10 +35,10 @@ export const _getQuotesFromUser = async(user: User_T, limit: number = 50) => {
 
     if (error) return null;
     
-    const quotes = data.map(x => x.Quotes);
-    for (let quote of quotes) {
-        (quote as any).createdAt = new Date((quote as any).createdAt);
+    const quotes: unknown[] = data.map(x => x.Quotes);
+    for (let quote of (quotes as Quote_T[])) {
+        quote.createdAt = new Date(quote.createdAt);
     }
 
-    return quotes;
+    return quotes as Quote_T[];
 }

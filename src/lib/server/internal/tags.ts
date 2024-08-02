@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import type { User_T, Tag_T } from "$lib/datatypes";
+import type { User_T, Tag_T, TagMembership_T } from "$lib/datatypes";
 import { randomUUID } from "crypto"
 
 export const _addTagMembership = async (user: User_T, tag: Tag_T) => {
@@ -12,7 +12,7 @@ export const _addTagMembership = async (user: User_T, tag: Tag_T) => {
         .select();
 
     if (error) return null;
-    return data[0];
+    return data[0] as TagMembership_T;
 }
 
 export const _addTag = async (user: User_T, tagName: string) => {
@@ -27,7 +27,7 @@ export const _addTag = async (user: User_T, tagName: string) => {
         .select();
 
     if (error) return null;
-    return data[0];
+    return data[0] as Tag_T;
 }
 
 export const _getTagsForUser = async (user: User_T) => {
@@ -37,7 +37,7 @@ export const _getTagsForUser = async (user: User_T) => {
         .eq("userId", user.id);
 
     if (error) return null;
-    const tags = data.map(x => x.Tags);
+    const tags: unknown[] = data.map(x => x.Tags);
 
-    return tags;
+    return tags as Tag_T[];
 }
