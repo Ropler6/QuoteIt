@@ -7,7 +7,7 @@ export const getQuotesFromUser = async (_user: string) => {
     if (user === null) return null;
 
     return {
-        quotes: await _getQuotesFromUser(user),
+        quotes: await _getQuotesFromUser(user.id),
         user
     }
 }
@@ -19,7 +19,7 @@ export const addSingleQuote = async (_user: string, text: string) => {
     const quote = await _addQuote(user.id, text);
     if (quote === null) return null;
 
-    const mention = await _addQuoteMention(user, quote);
+    const mention = await _addQuoteMention(user.id, quote.id);
     if (mention === null) return null;
 
     return { quote, mention };

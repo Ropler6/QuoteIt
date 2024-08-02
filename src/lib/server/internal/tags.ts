@@ -2,12 +2,12 @@ import { supabase } from "./supabase";
 import type { User_T, Tag_T, TagMembership_T } from "$lib/datatypes";
 import { randomUUID } from "crypto"
 
-export const _addTagMembership = async (user: User_T, tag: Tag_T) => {
+export const _addTagMembership = async (userId: number, tagId: number) => {
     const { data, error } = await supabase
         .from("TagMemberships")
         .insert([{
-            userId: user.id,
-            tagId: tag.id,
+            userId: userId,
+            tagId: tagId,
         }])
         .select();
 
@@ -15,13 +15,13 @@ export const _addTagMembership = async (user: User_T, tag: Tag_T) => {
     return data[0] as TagMembership_T;
 }
 
-export const _addTag = async (user: User_T, tagName: string) => {
+export const _addTag = async (userId: number, tagName: string) => {
     const { data, error } = await supabase
         .from("Tags")
         .insert([{
             hash: randomUUID(),
             createdAt: new Date(),
-            creatorId: user.id,
+            creatorId: userId,
             name: tagName,
         }])
         .select();
@@ -30,11 +30,11 @@ export const _addTag = async (user: User_T, tagName: string) => {
     return data[0] as Tag_T;
 }
 
-export const _getTagsForUser = async (user: User_T) => {
+export const _getTagsForUser = async (userId: number) => {
     const { data, error } = await supabase
         .from("TagMemberships")
         .select("Tags(*)")
-        .eq("userId", user.id);
+        .eq("userId", userId);
 
     if (error) return null;
     const tags: unknown[] = data.map(x => x.Tags);

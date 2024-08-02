@@ -14,11 +14,11 @@ export const _addQuote = async (creatorId: number, text: string) => {
     return data[0] as Quote_T;
 }
 
-export const _addQuoteMention = async (user: User_T, quote: Quote_T) => {
+export const _addQuoteMention = async (userId: number, quoteId: number) => {
     const { data, error } = await supabase
         .from("QuoteMentions")
         .insert([
-            { userId: user.id, quoteId: quote.id }
+            { userId: userId, quoteId: quoteId }
         ])
         .select();
 
@@ -27,11 +27,11 @@ export const _addQuoteMention = async (user: User_T, quote: Quote_T) => {
     return data[0] as QuoteMention_T;
 }
 
-export const _getQuotesFromUser = async(user: User_T, limit: number = 50) => {
+export const _getQuotesFromUser = async(userId: number, limit: number = 50) => {
     const { data, error } = await supabase
         .from("QuoteMentions")
         .select("Quotes(*)")
-        .eq("userId", user.id);
+        .eq("userId", userId);
 
     if (error) return null;
     
