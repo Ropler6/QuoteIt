@@ -77,3 +77,20 @@ export const _addTagToQuote = async (tagId: number, quoteId: number) => {
     if (error) return null;
     return data[0] as QuoteTag_T;
 }
+
+/**
+ * Internal function for fetching all `tag`s associated with a `quote`
+ * @param quoteId The ID of thq `quote`
+ * @returns All `tag`s associated with the `quote`
+ */
+export const _getTagsForQuote = async (quoteId: number) => {
+    const { data, error } = await supabase
+        .from("QuoteTags")
+        .select("Tags(*)")
+        .eq("quoteId", quoteId);
+
+    if (error) return null;
+    const tags: unknown = data.map(x => x.Tags)
+
+    return tags as Tag_T[];
+}

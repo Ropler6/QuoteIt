@@ -1,5 +1,5 @@
 import { _getUserByName } from "../internal/utils";
-import { _addTagMembership, _addTag, _getTagsForUser, _addTagToQuote } from "../internal/tags";
+import { _addTagMembership, _addTag, _getTagsForUser, _addTagToQuote, _getTagsForQuote } from "../internal/tags";
 import { _getFromId } from "../internal/utils";
 import type { Quote_T, Tag_T } from "$lib/datatypes";
 
@@ -62,3 +62,34 @@ export const addTagToQuote = async (_user: string, tagId: number, quoteId: numbe
     return quoteMention;
 }
 
+/**
+ * Fetches the tags associated with a `quote` which the current `user` can see
+ * @param username The name of the `user`
+ * @param quoteId The ID of the `quote`
+ * @returns The tags associated with the quote
+ */
+export const getTagsForQuote = async (username: string, quoteId: number) => {
+    const user = await _getUserByName(username);
+    if (!user) return null;
+
+    const quote = await _getFromId<Quote_T>(quoteId, "Quotes");
+    if (!quote) return null;
+
+    const userTags = await _getTagsForUser(user.id);
+    if (!userTags || userTags?.length === 0) return null;
+
+    const quoteTags = await _getTagsForQuote(quoteId);
+    if (!quoteTags || quoteTags?.length === 0) return null;
+
+    //there has to be a more efficient way...
+    let intersection: Tag_T[] = [];
+    for (const x of userTags) {
+        for (const y of quoteTags) {
+            if (x.id === y.id) {
+                intersection.push(x);
+            }
+        }
+    }
+
+    return intersection;
+}
