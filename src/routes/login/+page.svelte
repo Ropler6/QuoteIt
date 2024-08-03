@@ -7,8 +7,10 @@
 
     export let form: ActionData;
     if (form?.success)
-        if (browser)
+        if (browser) {
+            sessionStorage.setItem("userTags", JSON.stringify(form.tags));
             goto("/app");
+        }
 </script>
 
 <Header/>

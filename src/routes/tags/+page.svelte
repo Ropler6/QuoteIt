@@ -4,9 +4,17 @@
     import type { ActionData } from "./$types"
     import Tag from "$lib/components/Tag.svelte";
     import Notification from "$lib/components/Notification.svelte";
+    import type { Tag_T } from "$lib/datatypes";
+    import { browser } from "$app/environment";
 
     export let form: ActionData;
     export let data: PageData;
+
+    if (form?.success && form?.tag && browser) {
+        const userTags = JSON.parse(sessionStorage.getItem("userTags") || "[]") as Tag_T[];
+        userTags.push(form.tag);
+        sessionStorage.setItem("userTags", JSON.stringify(userTags));
+    }
 </script>
 
 <Header/>

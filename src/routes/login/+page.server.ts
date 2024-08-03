@@ -1,5 +1,6 @@
 import type { Actions } from "./$types"
 import { login } from "$lib/server/external/auth";
+import { getTagsForUser } from "$lib/server/external/tags";
 
 export const actions = {
     login: async ( { cookies, request } ) => {
@@ -14,6 +15,7 @@ export const actions = {
             return {
                 success: true,
                 user: user,
+                tags: await getTagsForUser(user) || [],
             };
         }
 
