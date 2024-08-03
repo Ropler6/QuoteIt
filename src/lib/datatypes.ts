@@ -32,3 +32,9 @@ export interface TagMembership_T {
     tagId: number;
     userId: number;
 }
+
+export interface QuoteTag_T {
+    id: number;
+    quoteId: number;
+    tagId: number;
+}
