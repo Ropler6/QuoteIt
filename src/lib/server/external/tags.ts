@@ -1,6 +1,7 @@
 import { _getUserByName } from "../internal/utils";
-import { _addTagMembership, _addTag, _getTagsForUser } from "../internal/tags";
+import { _addTagMembership, _addTag, _getTagsForUser, _addTagToQuote } from "../internal/tags";
 import { _getFromId } from "../internal/utils";
+import type { Quote_T, Tag_T } from "$lib/datatypes";
 
 /**
  * Creates a new `tag` associated with the `user`
@@ -35,5 +36,29 @@ export const getTagsForUser = async (_user: string) => {
 
     const tags = await _getTagsForUser(user.id);
     return tags;
+}
+
+/**
+ * Adds a `tag` to a `quote` owned by the `user`
+ * @param _user The name of the `user`
+ * @param tagId The ID of the `tag`
+ * @param quoteId The ID of the `quote`
+ * @returns The `quoteTag` object
+ */
+//TODO: check if the user is part of the tag
+export const addTagToQuote = async (_user: string, tagId: number, quoteId: number) => {
+    const user = await _getUserByName(_user);
+    if (!user) return null;
+
+    const tag = await _getFromId<Tag_T>(tagId, "Tags");
+    if (!tag) return null;
+
+    const quote = await _getFromId<Quote_T>(quoteId, "Quotes");
+    if (!quote) return null;
+
+    if (quote.creatorId !== user.id) return null;
+
+    const quoteMention = await _addTagToQuote(tagId, quoteId);
+    return quoteMention;
 }
 

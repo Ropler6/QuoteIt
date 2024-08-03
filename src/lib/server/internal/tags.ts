@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import type { User_T, Tag_T, TagMembership_T } from "$lib/datatypes";
+import type { Tag_T, TagMembership_T, QuoteTag_T } from "$lib/datatypes";
 import { randomUUID } from "crypto"
 
 /**
@@ -57,4 +57,23 @@ export const _getTagsForUser = async (userId: number) => {
     const tags: unknown[] = data.map(x => x.Tags);
 
     return tags as Tag_T[];
+}
+
+/**
+ * Internal function for adding a `tag` to a `quote`
+ * @param tagId The ID of the `tag` to be added
+ * @param quoteId athe ID of the `quote`
+ * @returns `true` if the operation has been successful, `false` otherwise
+ */
+export const _addTagToQuote = async (tagId: number, quoteId: number) => {
+    const { data, error } = await supabase
+        .from("QuoteTags")
+        .insert([{
+            quoteId: quoteId,
+            tagId: tagId,
+        }])
+        .select();
+
+    if (error) return null;
+    return data[0] as QuoteTag_T;
 }
