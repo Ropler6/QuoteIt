@@ -7,7 +7,7 @@
 </script>
 
 
-<p>{tag.name}</p>
+<span>{tag.name}</span>
 {#if showHash}
     <VisibleOnHover>
         <p>hash: {tag.hash}</p>
