@@ -3,12 +3,13 @@
     import VisibleOnHover from "./VisibleOnHover.svelte";
 
     export let tag: Tag_T;
+    export let showHash = false;
 </script>
 
 
 <p>{tag.name}</p>
-<VisibleOnHover>
-    <p>hash: {tag.hash}</p>
-</VisibleOnHover>
-
-
+{#if showHash}
+    <VisibleOnHover>
+        <p>hash: {tag.hash}</p>
+    </VisibleOnHover>
+{/if}
