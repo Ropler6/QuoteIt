@@ -2,6 +2,7 @@ import { _getUserByName } from "../internal/utils";
 import { _addTagMembership, _addTag, _getTagsForUser, _addTagToQuote, _getTagsForQuote } from "../internal/tags";
 import { _getFromId } from "../internal/utils";
 import type { Quote_T, Tag_T } from "$lib/datatypes";
+import { arrayIntersection } from "$lib/utils";
 
 /**
  * Creates a new `tag` associated with the `user`
@@ -81,15 +82,5 @@ export const getTagsForQuote = async (username: string, quoteId: number) => {
     const quoteTags = await _getTagsForQuote(quoteId);
     if (!quoteTags || quoteTags?.length === 0) return null;
 
-    //there has to be a more efficient way...
-    let intersection: Tag_T[] = [];
-    for (const x of userTags) {
-        for (const y of quoteTags) {
-            if (x.id === y.id) {
-                intersection.push(x);
-            }
-        }
-    }
-
-    return intersection;
+    return arrayIntersection<Tag_T>(userTags, quoteTags, (x: Tag_T, y: Tag_T) => x.id === y.id);
 }
