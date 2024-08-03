@@ -22,12 +22,4 @@ export const actions = {
         return { quote: result.quote, mention: result.mention, success: true };
     },
 
-    removeQuote: async ({ request }) => {
-        const jsonData = await request.json();
-        const quoteId: number = jsonData.quoteId;
-
-        const response = await removeSingleQuote(quoteId);
-        return { success: response };
-    }
-
 } satisfies Actions

@@ -7,13 +7,11 @@
     const dispatch = createEventDispatcher();
 
     const removeQuote = async () => {
-        const response = await fetch("?/removeQuote", {
-            method: "POST",
-            body: JSON.stringify({quoteId: quote.id}),
+        const response = await fetch(`/api/quotes/${quote.id}`, {
+            method: "DELETE",
         });
 
-        const json = await response.json();
-        const success = JSON.parse(json.data)[0].success;
+        const success = await response.json();
 
         if (success) {
             dispatch("destroy", { quote, mentions });
