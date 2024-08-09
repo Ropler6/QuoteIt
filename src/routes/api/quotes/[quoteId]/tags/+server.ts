@@ -3,7 +3,7 @@ import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ params, cookies }) => {
-    const quoteId = parseInt(params.slug);
+    const quoteId = parseInt(params.quoteId);
     const username = cookies.get("user") as string;
 
     const tags = await getTagsForQuote(username, quoteId);
@@ -13,7 +13,7 @@ export const GET: RequestHandler = async ({ params, cookies }) => {
 
 export const POST: RequestHandler = async ({ params, cookies, request }) => {
 
-    const quoteId = parseInt(params.slug);
+    const quoteId = parseInt(params.quoteId);
     const tagId = await request.json();
     const username = cookies.get("user") as string;
 
