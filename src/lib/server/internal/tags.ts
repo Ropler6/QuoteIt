@@ -94,3 +94,35 @@ export const _getTagsForQuote = async (quoteId: number) => {
 
     return tags as Tag_T[];
 }
+
+/**
+ * Internal function for removing a `tag` from the database
+ * @param tagId The ID of thq `tag`
+ * @returns `true` if the operation has been successful, `false` otherwise
+ */
+export const _deleteTag = async (tagId: number) => {
+    const { data, error } = await supabase
+        .from("Tags")
+        .delete()
+        .eq("tagId", tagId);
+
+    if (error) return false;
+    return true;
+}
+
+/**
+ * Internal function for removing a `tag` from a `quote`
+ * @param tagId The ID of thq `tag`
+ * @param quoteId The ID of the `quote`
+ * @returns `true` if the operation has been successful, `false` otherwise
+ */
+export const _removeTagFromQuote = async (tagId: number, quoteId: number) => {
+    const { data, error } = await supabase
+        .from("QuoteTags")
+        .delete()
+        .eq("tagId", tagId)
+        .eq("quoteId", quoteId);
+
+    if (error) return false;
+    return true;
+}
