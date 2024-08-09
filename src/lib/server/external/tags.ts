@@ -1,5 +1,5 @@
 import { _getUserByName } from "../internal/utils";
-import { _addTagMembership, _addTag, _getTagsForUser, _addTagToQuote, _getTagsForQuote } from "../internal/tags";
+import { _addTagMembership, _addTag, _getTagsForUser, _addTagToQuote, _getTagsForQuote, _removeTagFromQuote, _deleteTag } from "../internal/tags";
 import { _getFromId } from "../internal/utils";
 import type { Quote_T, Tag_T } from "$lib/datatypes";
 import { arrayIntersection } from "$lib/utils";
@@ -83,4 +83,41 @@ export const getTagsForQuote = async (username: string, quoteId: number) => {
     if (!quoteTags || quoteTags?.length === 0) return null;
 
     return arrayIntersection<Tag_T>(userTags, quoteTags, (x: Tag_T, y: Tag_T) => x.id === y.id);
+}
+
+/**
+ * Removes a `tag` from the database
+ * @param username The name of the `user` that made the `tag`
+ * @param tagId The ID of the `tag`
+ * @returns `true` if the operation was successful, `false` otherwise
+ */
+export const deleteTag = async (username: string, tagId: number) => {
+    const user = await _getUserByName(username);
+    if (!user) return false;
+
+    const tag = await _getFromId<Tag_T>(tagId, "Tags");
+    if (!tag) return false;
+
+    if (tag.creatorId !== user.id) return false;
+
+    return await _deleteTag(tagId);
+}
+
+/**
+ * Removes a `tag` a `quote`
+ * @param username The name of the `user` that made the `quote`
+ * @param tagId The ID of the `tag`
+ * @param quoteId the ID of the `quote`
+ * @returns `true` if the operation was successful, `false` otherwise
+ */
+export const removeTagFromQuote = async (username: string, tagId: number, quoteId: number) => {
+    const user = await _getUserByName(username);
+    if (!user) return false;
+
+    const quote = await _getFromId<Quote_T>(quoteId, "Quotes");
+    if (!quote) return false;
+
+    if (quote.creatorId !== user.id) return false;
+
+    return await _removeTagFromQuote(tagId, quoteId);
 }
