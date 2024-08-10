@@ -34,7 +34,7 @@
 
     {#if data?.success && data?.tags}
         {#each data.tags as tag}
-            <Tag tag={tag}/>
+            <Tag showHash={true} tag={tag}/>
         {/each}
     {/if}
 </main>
