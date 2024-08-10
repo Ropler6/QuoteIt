@@ -23,5 +23,7 @@ export const arrayIntersection = <T> (array1: Array<T>, array2: Array<T>, comp: 
  * but not in the second one
  */
 export const arrayDifference = <T> (array1: Array<T>, array2: Array<T>, comp: (x: T, y: T) => boolean) => {
+    if (array2.length === 0) return array1;
+    if (array1.length === 0) return [];
     return array1.filter(x => !array2.some(y => comp(x, y)));
 }
