@@ -31,7 +31,11 @@
         const json = await response.json();
         const success = JSON.parse(json.data)[0].success;
         
-        if (success && browser) goto("/app");
+        if (success && browser) {
+            sessionStorage.setItem("userTags", JSON.stringify([]));
+            goto("/app");
+        }
+        
         if (!success) {
             userExists = true;
             setTimeout(() => {
