@@ -1,5 +1,5 @@
 import { _getUserByName } from "../internal/utils";
-import { _addTagMembership, _addTag, _getTagsForUser, _addTagToQuote, _getTagsForQuote, _removeTagFromQuote, _deleteTag } from "../internal/tags";
+import { _addTagMembership, _addTag, _getTagsForUser, _addTagToQuote, _getTagsForQuote, _removeTagFromQuote, _deleteTag, _getTagByHash } from "../internal/tags";
 import { _getFromId } from "../internal/utils";
 import type { Quote_T, Tag_T } from "$lib/datatypes";
 import { arrayIntersection } from "$lib/utils";
@@ -120,4 +120,22 @@ export const removeTagFromQuote = async (username: string, tagId: number, quoteI
     if (quote.creatorId !== user.id) return false;
 
     return await _removeTagFromQuote(tagId, quoteId);
+}
+
+/**
+ * Adds an `user` to a `tag
+ * @param username The name of the `user`
+ * @param tagHash The hash of the `tag`
+ * @returns The `tagMembership` object
+ */
+//TODO: check if the user is already in the tag
+export const joinTag = async (username: string, tagHash: string) => {
+    const user = await _getUserByName(username);
+    if (!user) return null;
+
+    const tag = await _getTagByHash(tagHash);
+    if (!tag) return null;
+
+    const tagMembership = await _addTagMembership(user.id, tag.id);
+    return { tag, tagMembership }; 
 }
