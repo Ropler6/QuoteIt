@@ -1,4 +1,4 @@
-import { addTag, getTagsForUser } from "$lib/server/external/tags";
+import { addTag, getTagsForUser, joinTag } from "$lib/server/external/tags";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ cookies, request }) => {
@@ -17,6 +17,17 @@ export const actions = {
 
         const result = await addTag(user, tagName);
         if (result === null) return { success: false };
+
+        return { tag: result.tag, tagMembership: result.tagMembership, success: true };
+    },
+
+    joinTag: async ({ cookies, request }) => {
+        const user = cookies.get("user") as string;
+        const data = await request.formData();
+        const tagHash = data.get("tagHash") as string;
+
+        const result = await joinTag(user, tagHash);
+        if (!result) return { success: false };
 
         return { tag: result.tag, tagMembership: result.tagMembership, success: true };
     }

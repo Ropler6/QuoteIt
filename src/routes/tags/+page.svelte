@@ -28,6 +28,15 @@
         <button type="submit">Create</button>
     </form>
 
+    <form method="POST" action="?/joinTag">
+        <label for="tagHash">
+            Tag hash:
+            <input type="text" name="tagHash">
+        </label>
+
+        <button type="submit">Join</button>
+    </form>
+
     {#if form?.success}
         <Notification text={"Tag created successfully!"}/>
     {/if}
