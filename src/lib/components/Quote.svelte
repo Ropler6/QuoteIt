@@ -2,7 +2,7 @@
     import type { Quote_T, Tag_T, User_T } from "$lib/datatypes";
     import { createEventDispatcher } from "svelte";
     import VisibleOnHover from "./VisibleOnHover.svelte";
-    import TagSelector from "./TagSelector.svelte";
+    import TagManager from "./TagManager.svelte";
 
     export let quote: Quote_T;
     export let mentions: User_T[] = [];
@@ -43,7 +43,7 @@
     
     <!-- List of added/possible tags -->
     <VisibleOnHover on:reveal={fetchQuoteTags}>
-        <TagSelector quote={quote} quoteTags={quoteTags} on:addTag={addTag}/>
+        <TagManager quote={quote} quoteTags={quoteTags} on:addTag={addTag}/>
     </VisibleOnHover>
 
     <!-- Quote information -->
