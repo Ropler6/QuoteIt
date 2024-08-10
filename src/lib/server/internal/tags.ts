@@ -126,3 +126,18 @@ export const _removeTagFromQuote = async (tagId: number, quoteId: number) => {
     if (error) return false;
     return true;
 }
+
+/**
+ * Internal function for fetching a `tag` based on its `hash`
+ * @param hash The `hash` of the `tag`
+ * @returns The `tag` object associated with the `hash`
+ */
+export const _getTagByHash = async (hash: string) => {
+    const { data, error } = await supabase
+        .from("Tags")
+        .select("*")
+        .eq("hash", hash)
+
+    if (error) return null;
+    return data[0] as Tag_T;
+}
