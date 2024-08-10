@@ -37,13 +37,18 @@
         quoteTags = quoteTags;
     }
 
+    const removeTag = (event: CustomEvent) => {
+        const tag = event.detail as Tag_T;
+        quoteTags.splice(quoteTags.indexOf(tag), 1);
+        quoteTags = quoteTags;
+    }
 </script>
 
 <main>
     
     <!-- List of added/possible tags -->
     <VisibleOnHover on:reveal={fetchQuoteTags}>
-        <TagManager quote={quote} quoteTags={quoteTags} on:addTag={addTag}/>
+        <TagManager quote={quote} quoteTags={quoteTags} on:addTag={addTag} on:removeTag={removeTag}/>
     </VisibleOnHover>
 
     <!-- Quote information -->
