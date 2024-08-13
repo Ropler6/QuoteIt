@@ -1,5 +1,5 @@
 import { _getUserByName } from "../internal/utils";
-import { _addTagMembership, _addTag, _getTagsForUser, _addTagToQuote, _getTagsForQuote, _removeTagFromQuote, _deleteTag, _getTagByHash } from "../internal/tags";
+import { _addTagMembership, _addTag, _getTagsForUser, _addTagToQuote, _getTagsForQuote, _removeTagFromQuote, _deleteTag, _getTagByHash, _getTagMembership } from "../internal/tags";
 import { _getFromId } from "../internal/utils";
 import type { Quote_T, Tag_T } from "$lib/datatypes";
 import { arrayIntersection } from "$lib/utils";
@@ -46,7 +46,6 @@ export const getTagsForUser = async (username: string) => {
  * @param quoteId The ID of the `quote`
  * @returns The `quoteTag` object
  */
-//TODO: check if the user is part of the tag
 export const addTagToQuote = async (username: string, tagId: number, quoteId: number) => {
     const user = await _getUserByName(username);
     if (!user) return null;
@@ -58,6 +57,9 @@ export const addTagToQuote = async (username: string, tagId: number, quoteId: nu
     if (!quote) return null;
 
     if (quote.creatorId !== user.id) return null;
+
+    const membership = await _getTagMembership(user.id, tag.id);
+    if (!membership) return null;
 
     const quoteMention = await _addTagToQuote(tagId, quoteId);
     return quoteMention;
@@ -128,13 +130,15 @@ export const removeTagFromQuote = async (username: string, tagId: number, quoteI
  * @param tagHash The hash of the `tag`
  * @returns The `tagMembership` object
  */
-//TODO: check if the user is already in the tag
 export const joinTag = async (username: string, tagHash: string) => {
     const user = await _getUserByName(username);
     if (!user) return null;
 
     const tag = await _getTagByHash(tagHash);
     if (!tag) return null;
+
+    const membership = await _getTagMembership(user.id, tag.id);
+    if (membership) return null;
 
     const tagMembership = await _addTagMembership(user.id, tag.id);
     return { tag, tagMembership }; 
