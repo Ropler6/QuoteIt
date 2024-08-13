@@ -61,6 +61,21 @@ export const _getQuotesFromUser = async(userId: number, limit: number = 50) => {
     return quotes as Quote_T[];
 }
 
+export const _removeSingleQuote = async (quoteId: number) => {
+    const quotesResponse = await supabase
+        .from("Quotes")
+        .delete()
+        .eq("id", quoteId);
+
+    const ownershipResponse = await supabase
+        .from("QuoteMentions")
+        .delete()
+        .eq("quoteId", quoteId);
+
+    if (quotesResponse.error || ownershipResponse.error) return false;
+    return true;
+}
+
 /**
  * Internal function for fetching the most recent quotes the user can see
  * @param userId The ID of the `user`

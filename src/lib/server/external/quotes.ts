@@ -1,7 +1,7 @@
-import { supabase } from "../internal/supabase";
-import { _getUserByName } from "../internal/utils";
-import { _getQuotesFromUser, _addQuote, _addQuoteMention, _getQuotesVisibleToUser } from "../internal/quotes";
+import { _getFromId, _getUserByName } from "../internal/utils";
+import { _getQuotesFromUser, _addQuote, _addQuoteMention, _getQuotesVisibleToUser, _removeSingleQuote } from "../internal/quotes";
 import { arrayUnion } from "$lib/utils";
+import type { Quote_T } from "$lib/datatypes";
 
 /**
  * Fetches the `quotes` created by the `user`
@@ -39,19 +39,14 @@ export const addSingleQuote = async (_user: string, text: string) => {
  * @param quoteId The id of the `quote` to be removed
  * @returns `true` if the operation has been successful, `false` otherwise
  */
-export const removeSingleQuote = async (quoteId: number) => {
-    const quotesResponse = await supabase
-        .from("Quotes")
-        .delete()
-        .eq("id", quoteId);
+export const removeSingleQuote = async (username: string, quoteId: number) => {
+    const user = await _getUserByName(username);
+    const quote = await _getFromId<Quote_T>(quoteId, "Quotes");
 
-    const ownershipResponse = await supabase
-        .from("QuoteMentions")
-        .delete()
-        .eq("quoteId", quoteId);
+    if (!user || !quote) return false;
+    if (user.id !== quote.creatorId) return false;
 
-    if (quotesResponse.error || ownershipResponse.error) return false;
-    return true;
+    return await _removeSingleQuote(quoteId);
 }
 
 
