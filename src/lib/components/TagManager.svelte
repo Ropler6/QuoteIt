@@ -1,9 +1,10 @@
 <script lang="ts">
-    import type { Quote_T, Tag_T } from "$lib/datatypes";
+    import type { Quote_T, Tag_T, User_T } from "$lib/datatypes";
     import { arrayDifference } from "$lib/utils";
     import Tag from "./Tag.svelte";
     import { createEventDispatcher, onMount } from "svelte";
 
+    export let user: User_T;
     export let quote: Quote_T;
     export let quoteTags: Tag_T[] = [];
 
@@ -52,23 +53,29 @@
 </script>
 
 
-{#if addingTags}
-    {#each availableTags as tag}
-        <button on:click={() => addTagToQuote(tag)}>
-            <Tag showHash={false} tag={tag}/>
-        </button>
-    {/each}
+{#if user.id === quote.creatorId}
+    {#if addingTags}
+        {#each availableTags as tag}
+            <button on:click={() => addTagToQuote(tag)}>
+                <Tag showHash={false} tag={tag}/>
+            </button>
+        {/each}
+    {/if}
 {/if}
 
 <p>Tags:</p>
 {#each quoteTags as tag}
     <div class="tag">
         <Tag showHash={false} tag={tag} />
-        <button on:click={() => removeTagFromQuote(tag)}>X</button>
+        {#if user.id === quote.creatorId}
+            <button on:click={() => removeTagFromQuote(tag)}>X</button>
+        {/if}
     </div>
 {/each}
-<button on:click={() => addingTags = !addingTags}>+</button>
 
+{#if user.id === quote.creatorId}
+    <button on:click={() => addingTags = !addingTags}>+</button>
+{/if}
 
 <style>
     .tag {

@@ -4,8 +4,9 @@
     import VisibleOnHover from "./VisibleOnHover.svelte";
     import TagManager from "./TagManager.svelte";
 
-    export let quote: Quote_T;
-    export let mentions: User_T[] = [];
+    export let quote: Quote_T; //the quote object
+    export let user: User_T; //the user currently viewing the quote
+    export let mentions: User_T[] = []; //the users mentioned in the quote
     let quoteTags: Tag_T[] = [];
     const dispatch = createEventDispatcher();
 
@@ -48,7 +49,7 @@
     
     <!-- List of added/possible tags -->
     <VisibleOnHover on:reveal={fetchQuoteTags}>
-        <TagManager quote={quote} quoteTags={quoteTags} on:addTag={addTag} on:removeTag={removeTag}/>
+        <TagManager user={user} quote={quote} quoteTags={quoteTags} on:addTag={addTag} on:removeTag={removeTag}/>
     </VisibleOnHover>
 
     <!-- Quote information -->
@@ -60,5 +61,7 @@
     </p>
     <p>Created at: {quote.createdAt.toDateString()}</p>
 
-    <button on:click={removeQuote}>X</button>
+    {#if user.id === quote.creatorId}
+        <button on:click={removeQuote}>X</button>
+    {/if}
 </main>
