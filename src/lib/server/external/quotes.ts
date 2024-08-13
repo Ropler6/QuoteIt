@@ -1,6 +1,7 @@
 import { supabase } from "../internal/supabase";
 import { _getUserByName } from "../internal/utils";
-import { _getQuotesFromUser, _addQuote, _addQuoteMention } from "../internal/quotes";
+import { _getQuotesFromUser, _addQuote, _addQuoteMention, _getQuotesVisibleToUser } from "../internal/quotes";
+import { arrayUnion } from "$lib/utils";
 
 /**
  * Fetches the `quotes` created by the `user`
@@ -53,3 +54,15 @@ export const removeSingleQuote = async (quoteId: number) => {
     return true;
 }
 
+
+export const getQuotesVisibleToUser = async (username: string, limit: number = 50) => {
+    const user = await _getUserByName(username);
+    if (!user) return null;
+
+    const allQuotes = await _getQuotesVisibleToUser(user.id, limit);
+    const ownQuotes = await _getQuotesFromUser(user.id, limit);
+
+    if (!allQuotes || !ownQuotes) return null;
+
+    return arrayUnion(allQuotes, ownQuotes, (x, y) => x.id === y.id);
+}

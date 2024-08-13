@@ -60,3 +60,40 @@ export const _getQuotesFromUser = async(userId: number, limit: number = 50) => {
 
     return quotes as Quote_T[];
 }
+
+/**
+ * Internal function for fetching the most recent quotes the user can see
+ * @param userId The ID of the `user`
+ * @param limit How many quotes should be fetched
+ * @returns The latest `limit` (default is `50`) `quote`s which the `user` can see
+ * based on the `tag`s they are part of
+ */
+export const _getQuotesVisibleToUser = async (userId: number, limit = 50) => {
+
+    //get all tagIds from tags which the user is a member of
+    const tagIds = await supabase
+        .from("TagMemberships")
+        .select("tagId")
+        .eq("userId", userId);
+    if (tagIds.error) return null;
+
+    //get all quoteIds from those tags
+    const quoteIds = await supabase
+        .from("QuoteTags")
+        .select("quoteId")
+        .in("tagId", tagIds.data.map(x => x.tagId));
+    if (quoteIds.error) return null;
+
+    //get all quotes
+    const quotes = await supabase
+        .from("Quotes")
+        .select("*")
+        .in("id", quoteIds.data.map(x => x.quoteId));
+    if (quotes.error) return null;
+
+    for (let quote of ( quotes.data as Quote_T[])) {
+        quote.createdAt = new Date(quote.createdAt);
+    }
+
+    return quotes.data as Quote_T[];
+}
