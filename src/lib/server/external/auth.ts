@@ -36,3 +36,12 @@ export const login = async (name: string, password: string) => {
     if (user.password === password) return true;
     return false;
 }
+
+/**
+ * Fetches an `user` from the database based on their name
+ * @param name The name of the `user`
+ * @returns The `user` object
+ */
+export const getUserByName = async (name: string) => {
+    return await _getUserByName(name);
+}
