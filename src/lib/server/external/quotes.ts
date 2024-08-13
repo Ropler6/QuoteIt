@@ -11,10 +11,7 @@ export const getQuotesFromUser = async (_user: string) => {
     const user = await _getUserByName(_user);
     if (user === null) return null;
 
-    return {
-        quotes: await _getQuotesFromUser(user.id),
-        user
-    }
+    return await _getQuotesFromUser(user.id);
 }
 
 /**
