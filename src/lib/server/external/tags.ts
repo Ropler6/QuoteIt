@@ -6,15 +6,15 @@ import { arrayIntersection } from "$lib/utils";
 
 /**
  * Creates a new `tag` associated with the `user`
- * @param _user The name of the `user`
+ * @param username The name of the `user`
  * @param tagname The name of the `tag` to be created
  * @returns The `tag` and `tagMembership` objects or `null`
  */
 
 //TODO: check if a tag with the same name exists already
 //TODO: associated with the same user
-export const addTag = async (_user: string, tagname: string) => {
-    const user = await _getUserByName(_user);
+export const addTag = async (username: string, tagname: string) => {
+    const user = await _getUserByName(username);
     if (user === null) return null;
 
     const tag = await _addTag(user.id, tagname);
@@ -28,11 +28,11 @@ export const addTag = async (_user: string, tagname: string) => {
 
 /**
  * Fetches the `tags` for the `user`
- * @param _user The name of the `user`
+ * @param username The name of the `user`
  * @returns The `tag`s created by the `user` or `null`
  */
-export const getTagsForUser = async (_user: string) => {
-    const user = await _getUserByName(_user);
+export const getTagsForUser = async (username: string) => {
+    const user = await _getUserByName(username);
     if (user === null) return null;
 
     const tags = await _getTagsForUser(user.id);
@@ -41,14 +41,14 @@ export const getTagsForUser = async (_user: string) => {
 
 /**
  * Adds a `tag` to a `quote` owned by the `user`
- * @param _user The name of the `user`
+ * @param username The name of the `user`
  * @param tagId The ID of the `tag`
  * @param quoteId The ID of the `quote`
  * @returns The `quoteTag` object
  */
 //TODO: check if the user is part of the tag
-export const addTagToQuote = async (_user: string, tagId: number, quoteId: number) => {
-    const user = await _getUserByName(_user);
+export const addTagToQuote = async (username: string, tagId: number, quoteId: number) => {
+    const user = await _getUserByName(username);
     if (!user) return null;
 
     const tag = await _getFromId<Tag_T>(tagId, "Tags");

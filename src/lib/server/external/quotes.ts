@@ -5,11 +5,11 @@ import type { Quote_T } from "$lib/datatypes";
 
 /**
  * Fetches the `quotes` created by the `user`
- * @param _user The name of the `user`
+ * @param username The name of the `user`
  * @returns The `quotes` and the `user` that made them or null
  */
-export const getQuotesFromUser = async (_user: string) => {
-    const user = await _getUserByName(_user);
+export const getQuotesFromUser = async (username: string) => {
+    const user = await _getUserByName(username);
     if (user === null) return null;
 
     return await _getQuotesFromUser(user.id);
@@ -17,12 +17,12 @@ export const getQuotesFromUser = async (_user: string) => {
 
 /**
  * Creates a `quote` and adds it to the database
- * @param _user The name of the `user`
+ * @param username The name of the `user`
  * @param text The text content of the `quote`
  * @returns The `quote` and `mention` objects or `null`
  */
-export const addSingleQuote = async (_user: string, text: string) => {
-    const user = await _getUserByName(_user);
+export const addSingleQuote = async (username: string, text: string) => {
+    const user = await _getUserByName(username);
     if (user === null) return null;
 
     const quote = await _addQuote(user.id, text);
