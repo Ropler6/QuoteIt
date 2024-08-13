@@ -141,3 +141,14 @@ export const _getTagByHash = async (hash: string) => {
     if (error) return null;
     return data[0] as Tag_T;
 }
+
+export const _getTagMembership = async (userId: number, tagId: number) => {
+    const { data, error } = await supabase
+        .from("TagMemberships")
+        .select("*")
+        .eq("userId", userId)
+        .eq("tagId", tagId);
+
+    if (error) return null;
+    return data[0] as TagMembership_T;
+}
