@@ -1,13 +1,16 @@
 import type { Actions, PageServerLoad } from "./$types";
-import { addSingleQuote, getQuotesFromUser, removeSingleQuote } from "$lib/server/external/quotes";
+import { addSingleQuote } from "$lib/server/external/quotes";
+import { getQuotesVisibleToUser } from "$lib/server/external/quotes";
+import { getUserByName } from "$lib/server/external/auth";
 
 export const load: PageServerLoad = async ({ cookies }) => {
     const userCookie = cookies.get("user") as string;
-    const response = await getQuotesFromUser(userCookie);
-    if (response === null) return { success: false };
-    if (response.quotes === null) response.quotes = [];
+    const user = await getUserByName(userCookie);
+    const quotes = await getQuotesVisibleToUser(userCookie);
 
-    return { success: true, user: response.user, quotes: response.quotes };
+    if (!user || !quotes) return { success: false };
+
+    return { success: true, user, quotes };
 }
 
 export const actions = {
