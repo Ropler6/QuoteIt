@@ -38,3 +38,21 @@ export interface QuoteTag_T {
     quoteId: number;
     tagId: number;
 }
+
+export interface FriendRequest_T {
+    id: number;
+    senderId: number;
+    receiverId: number;
+    createdAt: Date;
+}
+
+export interface IncomingFriendRequest_T {
+    user: User_T,
+    friendRequest: FriendRequest_T;
+}
+
+export interface Friendship_T {
+    id: number;
+    userId1: number;
+    userId2: number;
+}
