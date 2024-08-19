@@ -56,15 +56,15 @@ export const _getQuotesFromUser = async(userId: number, limit: number = 50) => {
 }
 
 export const _removeSingleQuote = async (quoteId: number) => {
-    const quotesResponse = await supabase
-        .from("Quotes")
-        .delete()
-        .eq("id", quoteId);
+    const [quotesResponse, ownershipResponse] = await Promise.all([
+        supabase.from("Quotes")
+                .delete()
+                .eq("id", quoteId),
 
-    const ownershipResponse = await supabase
-        .from("QuoteMentions")
-        .delete()
-        .eq("quoteId", quoteId);
+        supabase.from("QuoteMentions")
+                .delete()
+                .eq("quoteId", quoteId)
+    ]);
 
     if (quotesResponse.error || ownershipResponse.error) return false;
     return true;
