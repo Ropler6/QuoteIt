@@ -1,8 +1,7 @@
 <script lang="ts">
-    import type { FriendRequest_T, User_T } from "$lib/datatypes";
+    import type { IncomingFriendRequest_T } from "$lib/datatypes";
 
-    export let user: User_T;
-    export let friendRequest: FriendRequest_T;
+    export let incomingFriendRequest: IncomingFriendRequest_T;
 </script>
 
-<p>{user.name} has sent you a friend request! {friendRequest.createdAt}</p>
+<p>{incomingFriendRequest.user.name} has sent you a friend request! {incomingFriendRequest.createdAt}</p>

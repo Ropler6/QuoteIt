@@ -14,8 +14,61 @@
         incomingFriendRequests = await response.json();
     });
 
+    const accept = async (request: IncomingFriendRequest_T) => {
+        const response = await fetch(`/api/users/${user.name}/friends`, {
+            method: "POST",
+            body: JSON.stringify(request.user),
+        });
+
+        const success = await response.json();
+
+        if (success) {
+            incomingFriendRequests.splice(incomingFriendRequests.indexOf(request), 1);
+            incomingFriendRequests = incomingFriendRequests;
+        } 
+    }
+
+    const decline = async (request: IncomingFriendRequest_T) => {
+        const response = await fetch(`/api/users/${user.name}/friend-requests`, {
+            method: "DELETE",
+            body: JSON.stringify(request),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const success = await response.json();
+
+        if (success){
+            incomingFriendRequests.splice(incomingFriendRequests.indexOf(request), 1);
+            incomingFriendRequests = incomingFriendRequests;
+        } 
+    }
+
 </script>
 
 {#each incomingFriendRequests as request}
-    <FriendRequest user={request.user} friendRequest={request.friendRequest} />
+    <div class="request">
+        <FriendRequest incomingFriendRequest={request} />
+        <div class="buttons">
+            <button on:click={() => accept(request)}>Accept</button>
+            <button on:click={() => decline(request)}>Decline</button>
+        </div>
+    </div>
 {/each}
+
+
+<style>
+    .request {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        width: 25em;
+    }
+
+    .buttons {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+</style>

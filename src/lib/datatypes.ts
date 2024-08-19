@@ -46,9 +46,8 @@ export interface FriendRequest_T {
     createdAt: Date;
 }
 
-export interface IncomingFriendRequest_T {
+export interface IncomingFriendRequest_T extends FriendRequest_T {
     user: User_T,
-    friendRequest: FriendRequest_T;
 }
 
 export interface Friendship_T {

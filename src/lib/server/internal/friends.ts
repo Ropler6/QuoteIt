@@ -70,10 +70,22 @@ export const _getIncomingFriendRequests = async (userId: number) => {
         .eq("receiverId", userId);
 
     if (error) return null;
+    return data as IncomingFriendRequest_T[];
+}
 
-    //peak inefficiency
-    return data.map(x => {
-        const { user, ...friendRequest } = x;
-        return { user, friendRequest } as IncomingFriendRequest_T
-    });
+/**
+ * Internal function for fetching a `friendRequest` between two users
+ * @param userId1 The ID of one `user`
+ * @param userId2 The ID of the other `user`
+ * @returns The `friendRequest` sent between them (if it exists)
+ */
+export const _getFriendRequest = async (userId1: number, userId2: number) => {
+    const { data, error } = await supabase
+        .from("FriendRequests")
+        .select("*")
+        .in("senderId", [userId1, userId2])
+        .in("receiverId", [userId1, userId2]);
+
+    if (error) return null;
+    return data[0] as FriendRequest_T;
 }
