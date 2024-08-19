@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import type { Quote_T, QuoteMention_T } from "$lib/datatypes";
+import type { Quote_T, QuoteMention_T, User_T } from "$lib/datatypes";
 
 /**
  * Internal function for adding a quote to the database
@@ -101,4 +101,19 @@ export const _getQuotesVisibleToUser = async (userId: number, limit = 50) => {
     if (quotes.error) return null;
 
     return quotes.data as Quote_T[];
+}
+
+/**
+ * Internal function for fetching the `user`s mentioned in a `quote`
+ * @param quoteId The ID of the `quote`
+ * @returns An array of `user`s which are mentioned in the `quote`
+ */
+export const _getMentions = async (quoteId: number) => {
+    const { data, error } = await supabase
+        .from("QuoteMentions")
+        .select("user: userId(*)")
+        .eq("quoteId", quoteId);
+
+    if (error) return null;
+    return (data as any[]).map(x => x.user) as User_T[];
 }
