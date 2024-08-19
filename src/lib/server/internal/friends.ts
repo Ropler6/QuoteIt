@@ -89,3 +89,27 @@ export const _getFriendRequest = async (userId1: number, userId2: number) => {
     if (error) return null;
     return data[0] as FriendRequest_T;
 }
+
+/**
+ * Internal function for fetching the friends of an `user`
+ * @param userId The ID of the `user`
+ * @returns An array of `user`s which are friends with the desired `user`
+ */
+//TODO: make this less (horrendously) inefficient
+export const _getFriends = async (userId: number) => {
+    const [response1, response2] = await Promise.all([
+        supabase.from("Friendships")
+                .select("userId1(*)")
+                .eq("userId1", userId),
+
+        supabase.from("Friendships")
+                .select("userId2(*)")
+                .eq("userId2", userId),
+    ]);
+
+    if (response1.error || response2.error) return null;
+    const arr1 = response1.data.map(x => x.userId1);
+    const arr2 = response2.data.map(x => x.userId2);
+    
+    return arr1.concat(arr2);
+}
