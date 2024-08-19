@@ -61,8 +61,8 @@ export const addTagToQuote = async (username: string, tagId: number, quoteId: nu
     const membership = await _getTagMembership(user.id, tag.id);
     if (!membership) return null;
 
-    const quoteMention = await _addTagToQuote(tagId, quoteId);
-    return quoteMention;
+    const quoteTag = await _addTagToQuote(tagId, quoteId);
+    return quoteTag;
 }
 
 /**
