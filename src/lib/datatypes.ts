@@ -2,13 +2,13 @@
 export interface User_T {
     id: number;
     name: string;
-    createdAt: Date;
+    createdAt: string;
     password: string;
 }
 
 export interface Quote_T {
     id: number;
-    createdAt: Date;
+    createdAt: string;
     text: string;
     creatorId: number;
 }
@@ -22,7 +22,7 @@ export interface QuoteMention_T {
 export interface Tag_T {
     id: number;
     hash: string;
-    createdAt: Date;
+    createdAt: string;
     name: string;
     creatorId: number;
 }
@@ -43,7 +43,7 @@ export interface FriendRequest_T {
     id: number;
     senderId: number;
     receiverId: number;
-    createdAt: Date;
+    createdAt: string;
 }
 
 export interface IncomingFriendRequest_T extends FriendRequest_T {

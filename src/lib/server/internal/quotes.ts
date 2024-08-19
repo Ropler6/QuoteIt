@@ -52,13 +52,7 @@ export const _getQuotesFromUser = async(userId: number, limit: number = 50) => {
         .eq("userId", userId);
 
     if (error) return null;
-    
-    const quotes: unknown[] = data.map(x => x.Quotes);
-    for (let quote of (quotes as Quote_T[])) {
-        quote.createdAt = new Date(quote.createdAt);
-    }
-
-    return quotes as Quote_T[];
+    return (data as any[]).map(x => x.Quotes) as Quote_T[];
 }
 
 export const _removeSingleQuote = async (quoteId: number) => {
@@ -105,10 +99,6 @@ export const _getQuotesVisibleToUser = async (userId: number, limit = 50) => {
         .select("*")
         .in("id", quoteIds.data.map(x => x.quoteId));
     if (quotes.error) return null;
-
-    for (let quote of ( quotes.data as Quote_T[])) {
-        quote.createdAt = new Date(quote.createdAt);
-    }
 
     return quotes.data as Quote_T[];
 }

@@ -6,4 +6,4 @@
 </script>
 
 <User user={incomingFriendRequest.user}/>
-<p>has sent you a friend request! {incomingFriendRequest.createdAt}</p>
+<p>has sent you a friend request! {new Date(incomingFriendRequest.createdAt).toDateString()}</p>

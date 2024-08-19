@@ -59,7 +59,7 @@
             {author.name}
         {/each}
     </p>
-    <p>Created at: {quote.createdAt.toDateString()}</p>
+    <p>Created at: {new Date(quote.createdAt).toDateString()}</p>
 
     {#if user.id === quote.creatorId}
         <button on:click={removeQuote}>X</button>
