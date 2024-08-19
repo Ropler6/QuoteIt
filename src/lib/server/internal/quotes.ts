@@ -21,22 +21,27 @@ export const _addQuote = async (creatorId: number, text: string) => {
 }
 
 /**
- * Internal function for adding a `quoteMention` to the database
- * @param userId The ID of the `user` mentioned in the quote
+ * Internal function for adding `quoteMention`s to the database
+ * @param userIds The array of ID of the `user`s mentioned in the quote
  * @param quoteId The ID of the `quote`
- * @returns The `quoteMention` object
+ * @returns An array with all `quoteMention`s
  */
-export const _addQuoteMention = async (userId: number, quoteId: number) => {
+export const _addQuoteMentions = async (userIds: number[], quoteId: number) => {
+    const mentions = userIds.map(id => {
+        return {
+            userId: id,
+            quoteId
+        }
+    });
+
     const { data, error } = await supabase
         .from("QuoteMentions")
-        .insert([
-            { userId: userId, quoteId: quoteId }
-        ])
+        .insert(mentions)
         .select();
 
     if (error) return null;
     if (data === null) return null;
-    return data[0] as QuoteMention_T;
+    return data as QuoteMention_T[];
 }
 
 /**

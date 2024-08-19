@@ -1,5 +1,5 @@
 import { _getFromId, _getUserByName } from "../internal/utils";
-import { _getQuotesFromUser, _addQuote, _addQuoteMention, _getQuotesVisibleToUser, _removeSingleQuote, _getMentions } from "../internal/quotes";
+import { _getQuotesFromUser, _addQuote, _addQuoteMentions, _getQuotesVisibleToUser, _removeSingleQuote, _getMentions } from "../internal/quotes";
 import { arrayUnion } from "$lib/utils";
 import type { Quote_T } from "$lib/datatypes";
 
@@ -28,7 +28,7 @@ export const addSingleQuote = async (username: string, text: string) => {
     const quote = await _addQuote(user.id, text);
     if (quote === null) return null;
 
-    const mention = await _addQuoteMention(user.id, quote.id);
+    const mention = await _addQuoteMentions([user.id], quote.id);
     if (mention === null) return null;
 
     return { quote, mention };
@@ -73,4 +73,26 @@ export const getMentions = async (username: string, quoteId: number) => {
     if (!user || !quote) return null;
     
     return await _getMentions(quote.id);
+}
+
+/**
+ * 
+ * @param creatorName The username of the `user` which made the quote
+ * @param mentionedName The username of the `user` to be mentioned
+ * @param quoteId The ID of the `quote`
+ * @returns 
+ */
+export const addQuoteMentions = async (creatorName: string, mentionedName: string[], quoteId: number) => {
+    const [creator, possibleMentioned, quote] = await Promise.all([
+        _getUserByName(creatorName),
+        Promise.all(mentionedName.map(name => _getUserByName(name))),
+        _getFromId<Quote_T>(quoteId, "Quotes")
+    ]);
+
+    if (!creator || !possibleMentioned || !quote) return null;
+    if (creator.id !== quote.creatorId) return null;
+
+    const mentioned = possibleMentioned.filter(x => x !== null)
+
+    return await _addQuoteMentions(mentioned.map(user => user.id), quoteId);
 }
