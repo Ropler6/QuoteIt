@@ -4,8 +4,8 @@ import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 
-export const POST: RequestHandler = async ({ params, request }) => {
-    const username = params.user;
+export const POST: RequestHandler = async ({ cookies, request }) => {
+    const username = cookies.get("user") as string;
     const newFriend = await request.json() as User_T;
 
     const friendship = await addFriendship(username, newFriend.name);

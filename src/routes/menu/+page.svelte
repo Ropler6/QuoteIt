@@ -9,8 +9,8 @@
 
 <Header/>
 {#if data.success && data.user}
-    <IncomingRequestManager user={data.user}/>
-    <OutgoingRequestManager user={data.user}/>
+    <IncomingRequestManager/>
+    <OutgoingRequestManager/>
 {:else}
     <p>Could not detect the current user!</p>
 {/if}

@@ -1,14 +1,12 @@
 <script lang="ts">
-    import type { User_T } from "$lib/datatypes";
     import Notification from "./Notification.svelte";
 
-    export let user: User_T;
     let friendName: string;
     let successMessageVisible = false;
     let errorMessageVisible = false;
     
     const sendFriendRequest = async () => {
-        const success = await fetch(`api/users/${user.name}/friend-requests`, {
+        const success = await fetch(`/api/users/friend-requests`, {
             method: "POST",
             body: JSON.stringify(friendName),
         });

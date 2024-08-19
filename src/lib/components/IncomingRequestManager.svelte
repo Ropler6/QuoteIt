@@ -1,13 +1,12 @@
 <script lang="ts">
     import FriendRequest from "./FriendRequest.svelte";
-    import type { IncomingFriendRequest_T, User_T } from "$lib/datatypes";
+    import type { IncomingFriendRequest_T } from "$lib/datatypes";
     import { onMount } from "svelte";
 
-    export let user: User_T;
     let incomingFriendRequests: IncomingFriendRequest_T[] = [];
 
     onMount(async () => {
-        const response = await fetch(`api/users/${user.name}/friend-requests`, {
+        const response = await fetch(`/api/users/friend-requests`, {
             method: "GET",
         });
 
@@ -15,7 +14,7 @@
     });
 
     const accept = async (request: IncomingFriendRequest_T) => {
-        const response = await fetch(`/api/users/${user.name}/friends`, {
+        const response = await fetch(`/api/users/friends`, {
             method: "POST",
             body: JSON.stringify(request.user),
         });
@@ -29,7 +28,7 @@
     }
 
     const decline = async (request: IncomingFriendRequest_T) => {
-        const response = await fetch(`/api/users/${user.name}/friend-requests`, {
+        const response = await fetch(`/api/users/friend-requests`, {
             method: "DELETE",
             body: JSON.stringify(request),
             headers: {
