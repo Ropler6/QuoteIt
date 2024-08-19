@@ -1,4 +1,4 @@
-import { _addFriendRequest, _addFriendship, _getFriendRequest, _getIncomingFriendRequests, _removeFriendRequest } from "../internal/friends";
+import { _addFriendRequest, _addFriendship, _getFriendRequest, _getFriends, _getIncomingFriendRequests, _removeFriendRequest } from "../internal/friends";
 import { _getUserByName } from "../internal/utils"
 
 /**
@@ -53,4 +53,16 @@ export const getIncomingFriendRequests = async (username: string) => {
  */
 export const removeFriendRequest = async (requestId: number) => {
     return await _removeFriendRequest(requestId);
+}
+
+/**
+ * Fetches the friends of a given `user`
+ * @param username The name of the `user`
+ * @returns An array of `user`s with whom the target `user` is friends
+ */
+export const getFriends = async (username: string) => {
+    const user = await _getUserByName(username);
+    if (!user) return null;
+
+    return await _getFriends(user.id);
 }
