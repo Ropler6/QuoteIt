@@ -2,8 +2,10 @@
     import Notification from "./Notification.svelte";
 
     let friendName: string;
-    let successMessageVisible = false;
-    let errorMessageVisible = false;
+    let notifVisible = false;
+    let notifMsg = "";
+    const errorMsg = "Could not send a friend request!"
+    const successMsg = "Friend request sent"
     
     const sendFriendRequest = async () => {
         const success = await fetch(`/api/users/friend-requests`, {
@@ -11,18 +13,13 @@
             body: JSON.stringify(friendName),
         });
 
-        if (success) {
-            successMessageVisible = true;
-            setTimeout(() => {
-                successMessageVisible = false;
-            }, 5000);
-        }
-        else {
-            errorMessageVisible = true;
-            setTimeout(() => {
-                errorMessageVisible = false;
-            }, 5000);
-        }
+        notifVisible = true;
+        setTimeout(() => {
+            notifVisible = false;
+        }, 5000);
+
+        if (success) notifMsg = successMsg;
+        else notifMsg = errorMsg;
     }
 </script>
 
@@ -32,10 +29,6 @@
     <button on:click={sendFriendRequest}>Send friend request</button>
 </label>
 
-{#if successMessageVisible}
-    <Notification text={"Friend request sent!"}/>
-{/if}
-
-{#if errorMessageVisible}
-    <Notification text={"Could not send a friend request!"}/>
+{#if notifVisible}
+    <Notification text={notifMsg}/>
 {/if}
