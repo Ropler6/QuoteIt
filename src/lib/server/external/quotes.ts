@@ -1,5 +1,5 @@
 import { _getFromId, _getUserByName } from "../internal/utils";
-import { _getQuotesFromUser, _addQuote, _addQuoteMention, _getQuotesVisibleToUser, _removeSingleQuote } from "../internal/quotes";
+import { _getQuotesFromUser, _addQuote, _addQuoteMention, _getQuotesVisibleToUser, _removeSingleQuote, _getMentions } from "../internal/quotes";
 import { arrayUnion } from "$lib/utils";
 import type { Quote_T } from "$lib/datatypes";
 
@@ -60,4 +60,17 @@ export const getQuotesVisibleToUser = async (username: string, limit: number = 5
     if (!allQuotes || !ownQuotes) return null;
 
     return arrayUnion(allQuotes, ownQuotes, (x, y) => x.id === y.id);
+}
+
+/**
+ * Fetches the `user`s mentioned in the `quote`
+ * @param username The name of the `user`
+ * @param quoteId The ID of the `quote`
+ * @returns An array containing the `user`s mentioned in the `quote`
+ */
+export const getMentions = async (username: string, quoteId: number) => {
+    const [user, quote] = await Promise.all([_getUserByName(username), _getFromId<Quote_T>(quoteId, "Quotes")]);
+    if (!user || !quote) return null;
+    
+    return await _getMentions(quote.id);
 }
