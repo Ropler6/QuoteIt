@@ -1,4 +1,4 @@
-import { _addFriendRequest, _addFriendship, _getIncomingFriendRequests } from "../internal/friends";
+import { _addFriendRequest, _addFriendship, _getFriendRequest, _getIncomingFriendRequests, _removeFriendRequest } from "../internal/friends";
 import { _getUserByName } from "../internal/utils"
 
 /**
@@ -24,10 +24,13 @@ export const addFriendRequest = async (senderUsername: string, receiverUsername:
  */
 //TODO: check if they are already friends
 export const addFriendship = async (username1: string, username2: string) => {
-    const user1 = await _getUserByName(username1);
-    const user2 = await _getUserByName(username2);
-
+    const [user1, user2] = await Promise.all([_getUserByName(username1), _getUserByName(username2)]);
     if (!user1 || !user2) return null;
+    
+    const request = await _getFriendRequest(user1.id, user2.id)
+    if (!request) return null;
+
+    _removeFriendRequest(request.id);
     return await _addFriendship(user1.id, user2.id);
 }
 
@@ -41,4 +44,13 @@ export const getIncomingFriendRequests = async (username: string) => {
     if (!user) return null;
 
     return await _getIncomingFriendRequests(user.id);
+}
+
+/**
+ * Removes the `friendRequest` with the given ID
+ * @param requestId The ID of the `friendRequest`
+ * @returns `true` if the operation has been successful, `false` otherwise
+ */
+export const removeFriendRequest = async (requestId: number) => {
+    return await _removeFriendRequest(requestId);
 }
