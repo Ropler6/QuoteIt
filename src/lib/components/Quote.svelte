@@ -3,10 +3,10 @@
     import { createEventDispatcher } from "svelte";
     import VisibleOnHover from "./VisibleOnHover.svelte";
     import TagManager from "./TagManager.svelte";
+    import Mentions from "./Mentions.svelte";
 
     export let quote: Quote_T; //the quote object
     export let user: User_T; //the user currently viewing the quote
-    export let mentions: User_T[] = []; //the users mentioned in the quote
     let quoteTags: Tag_T[] = [];
     const dispatch = createEventDispatcher();
 
@@ -18,7 +18,7 @@
         const success = await response.json();
 
         if (success) {
-            dispatch("destroy", { quote, mentions });
+            dispatch("destroy", quote);
         }
     }
 
@@ -50,15 +50,11 @@
     <!-- List of added/possible tags -->
     <VisibleOnHover on:reveal={fetchQuoteTags}>
         <TagManager user={user} quote={quote} quoteTags={quoteTags} on:addTag={addTag} on:removeTag={removeTag}/>
+        <Mentions quote={quote}/>
     </VisibleOnHover>
 
     <!-- Quote information -->
     <p>{quote.text}</p>
-    <p>by
-        {#each mentions as author}
-            {author.name}
-        {/each}
-    </p>
     <p>Created at: {new Date(quote.createdAt).toDateString()}</p>
 
     {#if user.id === quote.creatorId}

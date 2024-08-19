@@ -11,7 +11,7 @@
     let quoteDeleted = false;
 
     const onQuoteDelete = (event: CustomEvent) => {
-        const quote: Quote_T = event.detail.quote;
+        const quote: Quote_T = event.detail;
         quoteDeleted = true;
 
         if (data.quotes != null) {
@@ -44,8 +44,8 @@
     </form>
 
     {#if data?.success && data.quotes != null && data.user != null}
-        {#each data.quotes as quote}             <!-- temporary value -->
-            <Quote user={data.user} quote={quote} mentions={[data.user]} on:destroy={onQuoteDelete}/>
+        {#each data.quotes as quote}
+            <Quote user={data.user} quote={quote} on:destroy={onQuoteDelete}/>
         {/each}
     {:else}
         <Notification text={"Could not fetch quotes!"}/>
