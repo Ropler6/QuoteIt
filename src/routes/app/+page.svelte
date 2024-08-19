@@ -37,6 +37,11 @@
             <input type="text" name="text">
         </label>
 
+        <label for="mentions">
+            Mentions:
+            <input type="text" name="mentions">
+        </label>
+
         <button type="submit">Add quote</button>
         {#if form?.success}
             <Notification text={"Quote added successfully to the database!"}/>
