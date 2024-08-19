@@ -1,6 +1,7 @@
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import { addFriendRequest, getIncomingFriendRequests } from "$lib/server/external/friends";
+import { addFriendRequest, getIncomingFriendRequests, removeFriendRequest } from "$lib/server/external/friends";
+import type { FriendRequest_T } from "$lib/datatypes";
 
 
 export const POST: RequestHandler = async ({ params, request }) => {
@@ -14,4 +15,10 @@ export const POST: RequestHandler = async ({ params, request }) => {
 export const GET: RequestHandler = async ({ params }) => {
     const username = params.user;
     return json(await getIncomingFriendRequests(username) || []);
+}
+
+export const DELETE: RequestHandler = async ({ request }) => {
+    const friendRequest = await request.json() as FriendRequest_T;
+
+    return json(await removeFriendRequest(friendRequest.id));
 }
