@@ -7,4 +7,4 @@ const supabaseURL = "https://tacqyqeauhegmfndfbvs.supabase.co"
 export const supabase = createClient(supabaseURL, databaseKey);
 
 //a good enough permanent temporary solution
-export type Table_T = "QuoteMentions" | "QuoteTags" | "Quotes" | "TagMemberships" | "Tags" | "Users";
+export type Table_T = "FriendRequests" | "Friendships" | "QuoteMentions" | "QuoteTags" | "Quotes" | "TagMemberships" | "Tags" | "Users";
