@@ -1,7 +1,8 @@
 import { _getFromId, _getUserByName } from "../internal/utils";
 import { _getQuotesFromUser, _addQuote, _addQuoteMentions, _getQuotesVisibleToUser, _removeSingleQuote, _getMentions } from "../internal/quotes";
-import { arrayUnion } from "$lib/utils";
+import { arrayIntersection, arrayUnion } from "$lib/utils";
 import type { Quote_T } from "$lib/datatypes";
+import { _getFriends } from "../internal/friends";
 
 /**
  * Fetches the `quotes` created by the `user`
@@ -13,25 +14,6 @@ export const getQuotesFromUser = async (username: string) => {
     if (user === null) return null;
 
     return await _getQuotesFromUser(user.id);
-}
-
-/**
- * Creates a `quote` and adds it to the database
- * @param username The name of the `user`
- * @param text The text content of the `quote`
- * @returns The `quote` and `mention` objects or `null`
- */
-export const addSingleQuote = async (username: string, text: string) => {
-    const user = await _getUserByName(username);
-    if (user === null) return null;
-
-    const quote = await _addQuote(user.id, text);
-    if (quote === null) return null;
-
-    const mention = await _addQuoteMentions([user.id], quote.id);
-    if (mention === null) return null;
-
-    return { quote, mention };
 }
 
 /**
@@ -73,23 +55,31 @@ export const getMentions = async (username: string, quoteId: number) => {
 }
 
 /**
- * 
+ * Adds a `quote` to the database and adds all `user`s to its mentions as long
+ * as they are friends with the creator
  * @param creatorName The username of the `user` which made the quote
- * @param mentionedName The username of the `user` to be mentioned
- * @param quoteId The ID of the `quote`
+ * @param mentionedName The usernames of the `user`s to be mentioned
+ * @param text The text contents of the `quote`
  * @returns 
  */
-export const addQuoteMentions = async (creatorName: string, mentionedName: string[], quoteId: number) => {
-    const [creator, possibleMentioned, quote] = await Promise.all([
+export const addQuote = async (creatorName: string, mentionedName: string[], text: string) => {
+    const [creator, possibleMentioned] = await Promise.all([
         _getUserByName(creatorName),
         Promise.all(mentionedName.map(name => _getUserByName(name))),
-        _getFromId<Quote_T>(quoteId, "Quotes")
     ]);
 
-    if (!creator || !possibleMentioned || !quote) return null;
-    if (creator.id !== quote.creatorId) return null;
+    if (!creator || !possibleMentioned) return null;
 
-    const mentioned = possibleMentioned.filter(x => x !== null)
+    const mentioned = possibleMentioned.filter(x => x !== null);
+    const friends = await _getFriends(creator.id);
+    
+    if (!friends) return null;
+    //if at least one of the mentioned users isnt a friend, return null
+    if (arrayIntersection(mentioned, friends, (x, y) => x.id === y.id).length !== mentioned.length) return null;
 
-    return await _addQuoteMentions(mentioned.map(user => user.id), quoteId);
+    const quote = await _addQuote(creator.id, text);
+    if (!quote) return null;
+
+    const mentions = await _addQuoteMentions(mentioned.map(x => x.id).concat(creator.id), quote.id);
+    return { quote, mentions };
 }
