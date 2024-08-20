@@ -40,8 +40,7 @@ export const addSingleQuote = async (username: string, text: string) => {
  * @returns `true` if the operation has been successful, `false` otherwise
  */
 export const removeSingleQuote = async (username: string, quoteId: number) => {
-    const user = await _getUserByName(username);
-    const quote = await _getFromId<Quote_T>(quoteId, "Quotes");
+    const [user, quote] = await Promise.all([_getUserByName(username), _getFromId<Quote_T>(quoteId, "Quotes")])
 
     if (!user || !quote) return false;
     if (user.id !== quote.creatorId) return false;
@@ -54,9 +53,7 @@ export const getQuotesVisibleToUser = async (username: string, limit: number = 5
     const user = await _getUserByName(username);
     if (!user) return null;
 
-    const allQuotes = await _getQuotesVisibleToUser(user.id, limit);
-    const ownQuotes = await _getQuotesFromUser(user.id, limit);
-
+    const [allQuotes, ownQuotes] = await Promise.all([_getQuotesVisibleToUser(user.id, limit), _getQuotesFromUser(user.id, limit)])
     if (!allQuotes || !ownQuotes) return null;
 
     return arrayUnion(allQuotes, ownQuotes, (x, y) => x.id === y.id);

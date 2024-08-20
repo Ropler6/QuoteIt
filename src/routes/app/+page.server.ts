@@ -5,8 +5,7 @@ import { getUserByName } from "$lib/server/external/auth";
 
 export const load: PageServerLoad = async ({ cookies }) => {
     const userCookie = cookies.get("user") as string;
-    const user = await getUserByName(userCookie);
-    const quotes = await getQuotesVisibleToUser(userCookie);
+    const [user, quotes] = await Promise.all([getUserByName(userCookie), getQuotesVisibleToUser(userCookie)]);
 
     if (!user || !quotes) return { success: false };
 

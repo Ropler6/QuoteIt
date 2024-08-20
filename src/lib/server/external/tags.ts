@@ -47,14 +47,8 @@ export const getTagsForUser = async (username: string) => {
  * @returns The `quoteTag` object
  */
 export const addTagToQuote = async (username: string, tagId: number, quoteId: number) => {
-    const user = await _getUserByName(username);
-    if (!user) return null;
-
-    const tag = await _getFromId<Tag_T>(tagId, "Tags");
-    if (!tag) return null;
-
-    const quote = await _getFromId<Quote_T>(quoteId, "Quotes");
-    if (!quote) return null;
+    const [user, tag, quote] = await Promise.all([_getUserByName(username), _getFromId<Tag_T>(tagId, "Tags"), _getFromId<Quote_T>(quoteId, "Quotes")]);
+    if (!user || !tag || !quote) return null;
 
     if (quote.creatorId !== user.id) return null;
 
@@ -72,11 +66,8 @@ export const addTagToQuote = async (username: string, tagId: number, quoteId: nu
  * @returns The tags associated with the quote
  */
 export const getTagsForQuote = async (username: string, quoteId: number) => {
-    const user = await _getUserByName(username);
-    if (!user) return null;
-
-    const quote = await _getFromId<Quote_T>(quoteId, "Quotes");
-    if (!quote) return null;
+    const [user, quote] = await Promise.all([_getUserByName(username), _getFromId<Quote_T>(quoteId, "Quotes")]);
+    if (!user || !quote) return null;
 
     const userTags = await _getTagsForUser(user.id);
     if (!userTags || userTags?.length === 0) return null;
@@ -94,11 +85,8 @@ export const getTagsForQuote = async (username: string, quoteId: number) => {
  * @returns `true` if the operation was successful, `false` otherwise
  */
 export const deleteTag = async (username: string, tagId: number) => {
-    const user = await _getUserByName(username);
-    if (!user) return false;
-
-    const tag = await _getFromId<Tag_T>(tagId, "Tags");
-    if (!tag) return false;
+    const [user, tag] = await Promise.all([_getUserByName(username), _getFromId<Tag_T>(tagId, "Tags")]);
+    if (!user || !tag) return false;
 
     if (tag.creatorId !== user.id) return false;
 
@@ -113,11 +101,8 @@ export const deleteTag = async (username: string, tagId: number) => {
  * @returns `true` if the operation was successful, `false` otherwise
  */
 export const removeTagFromQuote = async (username: string, tagId: number, quoteId: number) => {
-    const user = await _getUserByName(username);
-    if (!user) return false;
-
-    const quote = await _getFromId<Quote_T>(quoteId, "Quotes");
-    if (!quote) return false;
+    const [user, quote] = await Promise.all([_getUserByName(username), _getFromId<Quote_T>(quoteId, "Quotes")]);
+    if (!user || !quote) return null;
 
     if (quote.creatorId !== user.id) return false;
 
@@ -131,11 +116,8 @@ export const removeTagFromQuote = async (username: string, tagId: number, quoteI
  * @returns The `tagMembership` object
  */
 export const joinTag = async (username: string, tagHash: string) => {
-    const user = await _getUserByName(username);
-    if (!user) return null;
-
-    const tag = await _getTagByHash(tagHash);
-    if (!tag) return null;
+    const [user, tag] = await Promise.all([_getUserByName(username), _getTagByHash(tagHash)]);
+    if (!user || !tag) return null;
 
     const membership = await _getTagMembership(user.id, tag.id);
     if (membership) return null;

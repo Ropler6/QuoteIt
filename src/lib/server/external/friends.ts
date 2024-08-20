@@ -9,8 +9,7 @@ import { _getUserByName } from "../internal/utils"
  */
 //TODO: check if they are already friends
 export const addFriendRequest = async (senderUsername: string, receiverUsername: string) => {
-    const sender = await _getUserByName(senderUsername);
-    const receiver = await _getUserByName(receiverUsername);
+    const [sender, receiver] = await Promise.all([_getUserByName(senderUsername), _getUserByName(receiverUsername)])
 
     if (!sender || !receiver) return null;
     return await _addFriendRequest(sender.id, receiver.id);
