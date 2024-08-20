@@ -99,17 +99,17 @@ export const _getFriendRequest = async (userId1: number, userId2: number) => {
 export const _getFriends = async (userId: number) => {
     const [response1, response2] = await Promise.all([
         supabase.from("Friendships")
-                .select("userId1(*)")
+                .select("userId2(*)")
                 .eq("userId1", userId),
 
         supabase.from("Friendships")
-                .select("userId2(*)")
+                .select("userId1(*)")
                 .eq("userId2", userId),
     ]);
 
     if (response1.error || response2.error) return null;
-    const arr1 = response1.data.map(x => x.userId1);
-    const arr2 = response2.data.map(x => x.userId2);
+    const arr1 = response2.data.map(x => x.userId1);
+    const arr2 = response1.data.map(x => x.userId2);
     
-    return arr1.concat(arr2);
+    return (arr2.concat(arr1) as unknown[]) as User_T[];
 }
