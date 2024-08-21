@@ -1,14 +1,16 @@
 <script lang="ts">
     import type { Quote_T, Tag_T, User_T } from "$lib/datatypes";
     import { createEventDispatcher } from "svelte";
-    import VisibleOnHover from "./VisibleOnHover.svelte";
     import TagManager from "./TagManager.svelte";
     import Mentions from "./Mentions.svelte";
+    import CustomCheckbox from "./CustomCheckbox.svelte";
 
     export let quote: Quote_T; //the quote object
     export let user: User_T; //the user currently viewing the quote
     let quoteTags: Tag_T[] = [];
     const dispatch = createEventDispatcher();
+    let toggled = false;
+    $: if (toggled) fetchQuoteTags();
 
     const removeQuote = async () => {
         const response = await fetch(`/api/quotes/${quote.id}`, {
@@ -48,15 +50,16 @@
 <main>
     
     <!-- List of added/possible tags -->
-    <VisibleOnHover on:reveal={fetchQuoteTags}>
+    {#if toggled}
         <TagManager user={user} quote={quote} quoteTags={quoteTags} on:addTag={addTag} on:removeTag={removeTag}/>
         <Mentions quote={quote}/>
-    </VisibleOnHover>
+    {/if}
 
     <!-- Quote information -->
     <p>{quote.text}</p>
     <p>Created at: {new Date(quote.createdAt).toDateString()}</p>
-
+    
+    <CustomCheckbox bind:toggled/>
     {#if user.id === quote.creatorId}
         <button on:click={removeQuote}>X</button>
     {/if}
