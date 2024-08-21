@@ -42,8 +42,20 @@
     {/if}
 
     {#if data?.success && data?.tags}
-        {#each data.tags as tag}
-            <Tag showHash={true} tag={tag}/>
-        {/each}
+        <div class="tags">
+            {#each data.tags as tag}
+                <Tag showHash={true} tag={tag}/>
+            {/each}
+        </div>
     {/if}
 </main>
+
+
+<style>
+    .tags {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
