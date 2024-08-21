@@ -50,7 +50,7 @@
 
     .details {
         border-radius: 10px;
-        background-colour: var(--secondary-colour);
+        background-color: var(--secondary-colour);
         padding: var(--size-xs);
         margin: var(--size-xs);
     }
