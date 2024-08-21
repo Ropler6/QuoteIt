@@ -32,9 +32,9 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        background-color: yellow;
-        padding: 20px 5vw;
-        margin: 0px;
+        background-color: var(--primary-colour);
+        padding: var(--size-l) 5vw;
+        margin: 0;
     }
 
     .links {
@@ -45,6 +45,6 @@
     }
 
     .title {
-        font-size: xx-large;
+        font-size: var(--size-xl);
     }
 </style>
