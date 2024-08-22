@@ -74,4 +74,8 @@
         align-items: center;
         justify-content: space-between;
     }
+
+    p {
+        font-size: var(--size-l);
+    }
 </style>

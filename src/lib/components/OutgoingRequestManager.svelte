@@ -32,3 +32,10 @@
 {#if notifVisible}
     <Notification text={notifMsg}/>
 {/if}
+
+
+<style>
+    label {
+        font-size: var(--size-l);
+    }
+</style>
