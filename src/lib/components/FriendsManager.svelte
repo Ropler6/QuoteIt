@@ -14,7 +14,11 @@
     })
 </script>
 
-<p>Friends:</p>
-{#each friends as friend}
-    <User user={friend}/>
-{/each}
+
+{#if friends.length}
+    {#each friends as friend}
+        <User user={friend}/>
+    {/each}
+{:else}
+    <p>You have no friends!</p>
+{/if}
