@@ -15,15 +15,13 @@
 
 <Header/>
 <main>
-
+    <h2 style:grid-row="1 / 2" style:grid-column="2 / 3">Login:</h2>
     <form action="?/login" method="post">
-        <label for="username">Username:
-            <input type="text" name="username">
-        </label>
+        <label for="username">Username:</label>
+        <input type="text" name="username">
         
-        <label for="password">Password:
-            <input type="text" name="password">
-        </label>
+        <label for="password">Password:</label>
+        <input type="text" name="password">
         
         <button type="submit">Submit</button>
     </form>
@@ -36,6 +34,39 @@
 
 <style>
     main {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 3fr;
         margin: 10px;
+    }
+
+    form {
+        display: grid;
+        grid-column: 2 / 3;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        align-items: center;
+        justify-items: center;
+        width: fit-content;
+    }
+
+    label {
+        grid-column: 1 / 2;
+        justify-self: flex-start;
+    }
+
+    input {
+        grid-column: 2 / 3;
+    }
+
+    button {
+        grid-column: 1 / 3;
+        grid-row: 3 / 4;
+        width: 25%;
+    }
+
+    h2 {
+        padding: var(--size-s);
+        margin: var(--size-xxs) 0;
     }
 </style>
