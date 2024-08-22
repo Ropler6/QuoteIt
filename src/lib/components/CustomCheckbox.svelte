@@ -2,12 +2,14 @@
     import eyeVisible from "/src/assets/eye-visible.svg"
     import eyeInvisible from "/src/assets/eye-invisible.svg"
 
+    export let width = "2em";
+    export let height = "2em";
     export let toggled = false;
     const toggle = () => toggled = !toggled;
 </script>
 
 
-<button on:click={toggle} style="background-image: url({toggled ? eyeVisible : eyeInvisible});"></button>
+<button on:click={toggle} style="--width: {width}; --height: {height}; background-image: url({toggled ? eyeVisible : eyeInvisible});"></button>
 
 
 <style>
@@ -17,7 +19,7 @@
         background-position: center;
         border: none;
         padding: 0;
-        width: 20px;
-        height: 20px;
+        width: var(--width);
+        height: var(--height);
     }
 </style>
