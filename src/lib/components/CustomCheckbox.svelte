@@ -12,6 +12,7 @@
 
 <style>
     button {
+        display: inline-block;
         background-size: cover;
         background-position: center;
         border: none;
