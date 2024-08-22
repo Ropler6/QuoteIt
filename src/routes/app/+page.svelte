@@ -31,7 +31,7 @@
     {/if}
 
     <form action="?/addQuote" method="POST">
-        <p class="create-quote">Create a quote:</p>
+        <h2 class="create-quote">Create a quote:</h2>
         <label style:grid-row="2 / 3" style:grid-column="1 / 2" for="text">Quote text:</label>
         <input style:grid-row="2 / 3" style:grid-column="2 / 3" type="text" name="text">
 
@@ -99,7 +99,6 @@
     }
 
     .create-quote {
-        font-size: var(--size-l);
         margin: var(--size-m);
         font-weight: bold;
         grid-column: 1 / 3;

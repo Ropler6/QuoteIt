@@ -82,11 +82,6 @@
         padding: var(--size-l);
     }
 
-    h2 {
-        color: var(--accent-colour);
-        font-size: var(--size-xl);
-    }
-
     label {
         font-size: var(--size-l);
     }

@@ -36,10 +36,6 @@
         flex-wrap: wrap;
     }
 
-    h2 {
-        color: var(--accent-colour);
-    }
-
     main > div {
         margin: var(--size-l);
     }
