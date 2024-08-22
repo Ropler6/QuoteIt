@@ -46,15 +46,19 @@
 
 </script>
 
-{#each incomingFriendRequests as request}
-    <div class="request">
-        <FriendRequest incomingFriendRequest={request} />
-        <div class="buttons">
-            <button on:click={() => accept(request)}>Accept</button>
-            <button on:click={() => decline(request)}>Decline</button>
+{#if incomingFriendRequests.length}    
+    {#each incomingFriendRequests as request}
+        <div class="request">
+            <FriendRequest incomingFriendRequest={request} />
+            <div class="buttons">
+                <button on:click={() => accept(request)}>Accept</button>
+                <button on:click={() => decline(request)}>Decline</button>
+            </div>
         </div>
-    </div>
-{/each}
+    {/each}
+{:else}
+    <p>You have no incoming friend requests!</p>
+{/if}
 
 
 <style>
