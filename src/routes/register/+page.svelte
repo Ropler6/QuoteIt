@@ -47,19 +47,16 @@
 
 <Header/>
 <main>
-
+    <h2 style:grid-row="1 / 2" style:grid-column="2 / 3">Register:</h2>
     <form>
-        <label for="username">Username:
-            <input bind:value={username} contenteditable="true" type="text" name="username">
-        </label>
+        <label for="username">Username:</label>
+        <input bind:value={username} contenteditable="true" type="text" name="username">
         
-        <label for="password1">Password:
-            <input bind:value={password1} contenteditable="true" type="text" name="password">
-        </label>
+        <label for="password1">Password:</label>
+        <input bind:value={password1} contenteditable="true" type="password" name="password">
 
-        <label for="password2">Confirm password:
-            <input bind:value={password2} contenteditable="true" type="text" name="password2">
-        </label>
+        <label for="password2">Confirm password:</label>
+        <input bind:value={password2} contenteditable="true" type="password" name="password2">
         
         <button on:click={submit} type="submit">Submit</button>
     </form>
@@ -76,6 +73,38 @@
 
 <style>
     main {
-        margin: 10px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 3fr;
+    }
+
+    form {
+        display: grid;
+        grid-column: 2 / 3;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+        align-items: center;
+        justify-items: center;
+        width: fit-content;
+    }
+
+    label {
+        grid-column: 1 / 2;
+        justify-self: flex-start;
+    }
+
+    input {
+        grid-column: 2 / 3;
+    }
+
+    button {
+        grid-column: 1 / 3;
+        grid-row: 4 / 5;
+        width: 25%;
+    }
+
+    h2 {
+        padding: var(--size-s);
+        margin: var(--size-xxs) 0;
     }
 </style>
