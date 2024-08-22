@@ -16,7 +16,22 @@
 
 </script>
 
-<p>by</p>
-{#each mentions as user}
-    <User user={user}/>
-{/each}
+<div>
+    <p>by</p>
+    {#each mentions as user}
+        <User user={user}/>
+    {/each}
+</div>
+
+
+<style>
+    div {
+        margin: var(--size-xxs);
+    }
+
+    p {
+        color: var(--accent-colour);
+        display: inline-block;
+        margin: var(--size-xs);
+    }
+</style>
