@@ -53,14 +53,31 @@
     {#if toggled}
         <TagManager user={user} quote={quote} quoteTags={quoteTags} on:addTag={addTag} on:removeTag={removeTag}/>
         <Mentions quote={quote}/>
+        <p class="created-at">Created at: {new Date(quote.createdAt).toDateString()}</p>
     {/if}
 
     <!-- Quote information -->
-    <p>{quote.text}</p>
-    <p>Created at: {new Date(quote.createdAt).toDateString()}</p>
+    <p class="text">{quote.text}</p>
     
     <CustomCheckbox bind:toggled/>
     {#if user.id === quote.creatorId}
         <button on:click={removeQuote}>X</button>
     {/if}
 </main>
+
+
+<style>
+    .created-at {
+        margin: var(--size-s);
+    }
+
+    main {
+        width: 100%;
+        align-self: center;
+        justify-self: center;
+    }
+
+    .text {
+        display: inline-block;
+    }
+</style>
