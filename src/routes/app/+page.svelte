@@ -26,34 +26,83 @@
 
 <Header/>
 <main>
-
     {#if quoteDeleted}
         <p>Quote was deleted successfully!</p>
     {/if}
 
     <form action="?/addQuote" method="POST">
-        <label for="text">
-            Quote text:
-            <input type="text" name="text">
-        </label>
+        <p class="create-quote">Create a quote:</p>
+        <label style:grid-row="2 / 3" style:grid-column="1 / 2" for="text">Quote text:</label>
+        <input style:grid-row="2 / 3" style:grid-column="2 / 3" type="text" name="text">
 
-        <label for="mentions">
-            Mentions:
-            <input type="text" name="mentions">
-        </label>
+        <label style:grid-row="3 / 4" style:grid-column="1 / 2" for="mentions">Mentions:</label>
+        <input style:grid-row="3 / 4" style:grid-column="2 / 3" type="text" name="mentions">
 
-        <button type="submit">Add quote</button>
+        <button class="submit" style:grid-column="1 / 3" style:grid-row="4 / 5" type="submit">Add quote</button>
         {#if form?.success}
             <Notification text={"Quote added successfully to the database!"}/>
         {/if}
     </form>
 
     {#if data?.success && data.quotes != null && data.user != null}
-        {#each data.quotes as quote}
-            <Quote user={data.user} quote={quote} on:destroy={onQuoteDelete}/>
-        {/each}
+        <div class="quotes">
+            {#each data.quotes as quote}
+                <Quote user={data.user} quote={quote} on:destroy={onQuoteDelete}/>
+            {/each}
+        </div>
     {:else}
         <Notification text={"Could not fetch quotes!"}/>
     {/if}
-
 </main>
+
+
+<style>
+    main {
+        display: grid;
+        grid-template-columns: 2fr 2fr 2fr;
+        grid-template-rows: 1fr 9fr;
+    }
+
+    .quotes {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+    }
+
+    form {
+        display: grid;
+        align-self: center;
+        justify-self: center;
+        width: 100%;
+        grid-row: 1 / 2;
+        grid-column: 2 / 3;
+        grid-template-columns: 1fr 2fr;
+        grid-template-rows: 2fr 1fr 1fr 1fr;
+    }
+
+    label {
+        align-self: center;
+        margin: 0 var(--size-m);
+    }
+
+    input {
+        width: 250px;
+        margin: var(--size-xs);
+    }
+
+    .submit {
+        width: 10em;
+        font-size: var(--size-m);
+        justify-self: center;
+    }
+
+    .create-quote {
+        font-size: var(--size-l);
+        margin: var(--size-m);
+        font-weight: bold;
+        grid-column: 1 / 3;
+        align-self: center;
+    }
+</style>
