@@ -12,3 +12,10 @@
     --size-xl: 1.75rem;
     --size-xxl: 2.5rem;
 }
+
+button {
+    background-color: var(--secondary-colour);
+    color: var(--text-colour);
+    border-radius: 15px;
+    padding: var(--size-xxs) var(--size-xs);
+}
