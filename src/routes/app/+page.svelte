@@ -5,6 +5,8 @@
     import type { ActionData } from "./$types";
     import type { Quote_T } from "$lib/datatypes";
     import Notification from "$lib/components/Notification.svelte";
+    import { flip } from "svelte/animate";
+    import { quintInOut } from "svelte/easing";
 
     export let form: ActionData;
     export let data: PageData;
@@ -26,28 +28,29 @@
 
 <Header/>
 <main>
-    {#if quoteDeleted}
-        <p>Quote was deleted successfully!</p>
-    {/if}
-
     <form action="?/addQuote" method="POST">
         <h2 class="create-quote">Create a quote:</h2>
         <label style:grid-row="2 / 3" style:grid-column="1 / 2" for="text">Quote text:</label>
-        <input style:grid-row="2 / 3" style:grid-column="2 / 3" type="text" name="text">
+        <textarea style:grid-row="2 / 3" style:grid-column="2 / 3" name="text" style:resize="none"></textarea>
 
         <label style:grid-row="3 / 4" style:grid-column="1 / 2" for="mentions">Mentions:</label>
         <input style:grid-row="3 / 4" style:grid-column="2 / 3" type="text" name="mentions">
 
         <button class="submit" style:grid-column="1 / 3" style:grid-row="4 / 5" type="submit">Add quote</button>
-        {#if form?.success}
-            <Notification text={"Quote added successfully to the database!"}/>
-        {/if}
     </form>
-
+    
     {#if data?.success && data.quotes != null && data.user != null}
         <div class="quotes">
-            {#each data.quotes as quote}
-                <Quote user={data.user} quote={quote} on:destroy={onQuoteDelete}/>
+            {#if form?.success}
+                <Notification text={"Quote added successfully to the database!"}/>
+            {/if}
+            {#if quoteDeleted}
+                <Notification text={"Quote was deleted successfully!"}/>
+            {/if}
+            {#each data.quotes as quote (quote)}
+                <div style:width="100%" animate:flip={{ duration: 1500, easing: quintInOut }}>
+                    <Quote user={data.user} quote={quote} on:destroy={onQuoteDelete}/>
+                </div>
             {/each}
         </div>
     {:else}
@@ -87,7 +90,7 @@
         margin: 0 var(--size-m);
     }
 
-    input {
+    input, textarea {
         width: 250px;
         margin: var(--size-xs);
     }
