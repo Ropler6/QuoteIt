@@ -1,7 +1,12 @@
 <script lang="ts">
+    import { browser } from "$app/environment";
+    import { goto } from "$app/navigation";
     import Header from "$lib/components/Header.svelte";
+    import type { PageData } from "./$types";
     import "/src/style.css"
 
+    export let data: PageData;
+    if (data.redirect && browser) goto("/app");
 </script>
 
 
