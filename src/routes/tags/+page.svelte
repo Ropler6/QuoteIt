@@ -81,8 +81,4 @@
         flex-direction: column;
         padding: var(--size-l);
     }
-
-    label {
-        font-size: var(--size-l);
-    }
 </style>
