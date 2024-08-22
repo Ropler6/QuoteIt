@@ -52,36 +52,45 @@
     }
 </script>
 
-
-{#if user.id === quote.creatorId}
-    {#if addingTags}
+<main>
+    {#if user.id === quote.creatorId && addingTags}
         {#each availableTags as tag}
             <button on:click={() => addTagToQuote(tag)}>
                 <Tag showHash={false} tag={tag}/>
             </button>
         {/each}
     {/if}
-{/if}
-
-<p>Tags:</p>
-{#each quoteTags as tag}
-    <div class="tag">
-        <Tag showHash={false} tag={tag} />
-        {#if user.id === quote.creatorId}
-            <button on:click={() => removeTagFromQuote(tag)}>X</button>
-        {/if}
-    </div>
-{/each}
-
-{#if user.id === quote.creatorId}
-    <button on:click={() => addingTags = !addingTags}>+</button>
-{/if}
+    
+    <h3>Tags:</h3>
+    {#each quoteTags as tag}
+        <div class="tag">
+            <Tag showHash={false} tag={tag} />
+            {#if user.id === quote.creatorId}
+                <button on:click={() => removeTagFromQuote(tag)}>X</button>
+            {/if}
+        </div>
+    {/each}
+    
+    {#if user.id === quote.creatorId}
+        <button on:click={() => addingTags = !addingTags}>+</button>
+    {/if}
+</main>
 
 <style>
+    main {
+        margin: var(--size-xxs);
+    }
+
     .tag {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         display: inline;
+    }
+
+    h3 {
+        color: var(--accent-colour);
+        display: inline-block;
+        margin: var(--size-xxs);
     }
 </style>
