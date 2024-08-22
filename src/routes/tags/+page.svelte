@@ -19,31 +19,6 @@
 
 <Header/>
 <main>
-    <div class="forms">
-        <h2 style:grid-column="2 / 3">Create a tag:</h2>
-        <form method="POST" action="?/createTag">
-            <label for="tagName">
-                Tag name:
-                <input type="text" name="tagName">
-            </label>
-    
-            <button type="submit">Create</button>
-        </form>
-    
-        <h2 style:grid-column="4 / 5">Join a tag:</h2>
-        <form method="POST" action="?/joinTag">
-            <label for="tagHash">
-                Tag hash:
-                <input type="text" name="tagHash">
-            </label>
-    
-            <button type="submit">Join</button>
-        </form>
-    
-        {#if form?.success}
-            <Notification text={"Tag created successfully!"}/>
-        {/if}
-    </div>
 
     {#if data?.success && data?.tags}
     <div class="tags">
@@ -53,10 +28,47 @@
             {/each}
         </div>
     {/if}
+
+    <div class="forms">
+        <div class="create">
+            <h2>Create a tag:</h2>
+            <form method="POST" action="?/createTag">
+                <label for="tagName">
+                    Tag name:
+                    <input type="text" name="tagName">
+                </label>
+                <button type="submit">Create</button>
+            </form>
+            {#if form?.success}
+                <Notification text={"Tag created successfully!"}/>
+            {/if}
+        </div>
+    
+        <div class="join">
+            <h2>Join a tag:</h2>
+            <form method="POST" action="?/joinTag">
+                <label for="tagHash">
+                    Tag hash:
+                    <input type="text" name="tagHash">
+                </label>
+        
+                <button type="submit">Join</button>
+            </form>
+        </div>
+    
+    </div>
+
 </main>
 
 
 <style>
+    main {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
     .tags {
         display: flex;
         flex-direction: column;
@@ -65,21 +77,9 @@
     }
 
     .forms {
-        display: grid;
-        grid-template-columns: 1fr 2fr 3fr 2fr 1fr;
-        grid-template-rows: 1fr 1fr;
-        border-bottom: 5px solid var(--accent-colour);
+        display: flex;
+        flex-direction: column;
         padding: var(--size-l);
-    }
-
-    [action="?/createTag"] {
-        grid-column: 2 / 3;
-        grid-row: 2 / 3;
-    }
-
-    [action="?/joinTag"] {
-        grid-column: 4 / 5;
-        grid-row: 2 / 3;
     }
 
     h2 {
