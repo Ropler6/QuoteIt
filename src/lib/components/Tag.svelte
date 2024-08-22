@@ -27,10 +27,11 @@
 
 <style>
     .tag {
-        font-size: var(--size-l);
+        font-size: var(--size-m);
         display: inline-flex;
         flex-direction: column;
         justify-content: center;
+        padding: 0 var(--size-xs);
     }
     
     .main {
