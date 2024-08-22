@@ -4,6 +4,8 @@
     import TagManager from "./TagManager.svelte";
     import Mentions from "./Mentions.svelte";
     import CustomCheckbox from "./CustomCheckbox.svelte";
+    import { fade, fly } from "svelte/transition";
+    import { quadInOut } from "svelte/easing";
 
     export let quote: Quote_T; //the quote object
     export let user: User_T; //the user currently viewing the quote
@@ -47,22 +49,27 @@
     }
 </script>
 
-<main>
-    
+<main out:fade={{easing: quadInOut}}>
     <!-- List of added/possible tags -->
     {#if toggled}
-        <TagManager user={user} quote={quote} quoteTags={quoteTags} on:addTag={addTag} on:removeTag={removeTag}/>
-        <Mentions quote={quote}/>
-        <p class="created-at">Created at: {new Date(quote.createdAt).toDateString()}</p>
+        <div transition:fly={{ x: "-50%" }} class="details">
+            <TagManager user={user} quote={quote} quoteTags={quoteTags} on:addTag={addTag} on:removeTag={removeTag}/>
+            <Mentions quote={quote}/>
+            <p class="created-at">Created at: {new Date(quote.createdAt).toDateString()}</p>
+        </div>
     {/if}
 
     <!-- Quote information -->
-    <p class="text">{quote.text}</p>
-    
-    <CustomCheckbox bind:toggled/>
-    {#if user.id === quote.creatorId}
-        <button on:click={removeQuote}>X</button>
-    {/if}
+    <div class="content">
+        <p class="text">{quote.text}</p>
+        
+        <div class="buttons">
+            <CustomCheckbox width={"2em"} height={"2em"} bind:toggled/>
+            {#if user.id === quote.creatorId}
+                <button on:click={removeQuote}>X</button>
+            {/if}
+        </div>
+    </div>
 </main>
 
 
@@ -74,10 +81,30 @@
     main {
         width: 100%;
         align-self: center;
-        justify-self: center;
     }
 
     .text {
         display: inline-block;
+        font-size: var(--size-l);
+        width: fit-content;
+        padding: var(--size-xs);
+        margin: var(--size-s);
+        white-space: pre-wrap;
+    }
+
+    .content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .buttons {
+        display: flex;
+        align-items: center;
+    }
+
+    button {
+        width: 2em;
+        height: 2em;
     }
 </style>
