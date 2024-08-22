@@ -88,6 +88,7 @@
     label {
         align-self: center;
         margin: 0 var(--size-m);
+        font-size: var(--size-l);
     }
 
     input, textarea {
