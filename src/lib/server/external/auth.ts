@@ -1,3 +1,4 @@
+import { _getSalt, _hash } from "../internal/auth";
 import { supabase } from "../internal/supabase";
 import { _getUserByName } from "../internal/utils";
 
@@ -32,8 +33,11 @@ export const register = async (name: string, password: string) => {
  */
 export const login = async (name: string, password: string) => {
     const user = await _getUserByName(name);
-    if (user === null) return false;
-    if (user.password === password) return true;
+    if (!user) return false;
+    const salt = await _getSalt(user.id);
+    if (!salt) return false;
+
+    if (_hash(user.password, salt) === _hash(password, salt)) return true;
     return false;
 }
 
