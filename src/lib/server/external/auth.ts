@@ -1,4 +1,4 @@
-import { _getSalt, _hash } from "../internal/auth";
+import { _generateSalt, _getSalt, _hash } from "../internal/auth";
 import { supabase } from "../internal/supabase";
 import { _getUserByName } from "../internal/utils";
 
@@ -12,12 +12,15 @@ export const register = async (name: string, password: string) => {
     const user = await _getUserByName(name);
     if (user !== null) return false;
 
+    const salt = _generateSalt();
+
     const { error } = await supabase
         .from("Users")
         .insert([{
             name,
-            password,
+            password: _hash(password, salt),
             createdAt: new Date(),
+            salt,
         }])
         .select();
 
