@@ -8,8 +8,11 @@ export const load: PageServerLoad = async ({ cookies }) => {
     const [user, quotes] = await Promise.all([getUserByName(userCookie), getQuotesVisibleToUser(userCookie)]);
 
     if (!user || !quotes) return { success: false };
+    const markedQuotes = quotes.map(x => {
+        return { quote: x, owned: user.id === x.creatorId }
+    })
 
-    return { success: true, user, quotes };
+    return { success: true, user, quotes: markedQuotes };
 }
 
 export const actions = {

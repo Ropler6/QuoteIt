@@ -17,7 +17,7 @@
         quoteDeleted = true;
 
         if (data.quotes != null) {
-            data.quotes = data.quotes.filter(elem => elem.id != quote.id)
+            data.quotes = data.quotes.filter(elem => elem.quote.id !== quote.id)
         }
         
         setTimeout(() => {
@@ -47,9 +47,9 @@
             {#if quoteDeleted}
                 <Notification text={"Quote was deleted successfully!"}/>
             {/if}
-            {#each data.quotes as quote (quote)}
+            {#each data.quotes as quoteData (quoteData)}
                 <div style:width="100%" animate:flip={{ duration: 1500, easing: quintInOut }}>
-                    <Quote user={data.user} quote={quote} on:destroy={onQuoteDelete}/>
+                    <Quote user={data.user} quote={quoteData.quote} owned={quoteData.owned} on:destroy={onQuoteDelete}/>
                 </div>
             {/each}
         </div>

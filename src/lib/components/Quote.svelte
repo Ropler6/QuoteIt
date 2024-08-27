@@ -9,6 +9,8 @@
 
     export let quote: Quote_T; //the quote object
     export let user: User_T; //the user currently viewing the quote
+    export let owned: boolean = false; //whether the current user owns the quote or not
+    
     let quoteTags: Tag_T[] = [];
     const dispatch = createEventDispatcher();
     let toggled = false;
@@ -65,7 +67,7 @@
         
         <div class="buttons">
             <CustomCheckbox width={"2em"} height={"2em"} bind:toggled/>
-            {#if user.id === quote.creatorId}
+            {#if owned}
                 <button on:click={removeQuote}>X</button>
             {/if}
         </div>
