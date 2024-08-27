@@ -62,3 +62,24 @@ export const arrayDifference = <T> (array1: Array<T>, array2: Array<T>, comp: (x
 export const arrayUnion = <T> (array1: Array<T>, array2: Array<T>, comp: (x: T, y: T) => boolean) => {
     return arrayDifference(array1, array2, comp).concat(array2);
 }
+
+/**
+ * Creates a string that displays the elapsed time between `now` and `date`
+ * @param date The date from which to display the elapsed time
+ * @returns The time string
+ */
+export const elapsedTimeString = (date: Date) => {
+    const now = new Date();
+    const secondsPast = (now.getTime() - date.getTime()) / 1000;
+    if (secondsPast < 60) {
+        return `${Math.round(secondsPast)} s`;
+    }
+    if (secondsPast < 3600) {
+        return `${Math.round(secondsPast / 60)} min`;
+    }
+    if (secondsPast <= 86400) {
+        return `${Math.round(secondsPast / 3600)} h`;
+    }
+
+    return `${date.toDateString()}`;
+}
