@@ -40,7 +40,7 @@ export const login = async (name: string, password: string) => {
     const salt = await _getSalt(user.id);
     if (!salt) return false;
 
-    if (_hash(user.password, salt) === _hash(password, salt)) return true;
+    if (user.password === _hash(password, salt)) return true;
     return false;
 }
 
