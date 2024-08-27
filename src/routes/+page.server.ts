@@ -1,4 +1,3 @@
-import { goto } from "$app/navigation";
 import { getUserByName } from "$lib/server/external/auth";
 import type { PageServerLoad } from "./$types";
 
