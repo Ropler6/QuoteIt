@@ -13,10 +13,10 @@ export const _generateSalt = () => {
  * Internal function for hashing passwords
  * @param password The password to be hashed
  * @param salt The salt associated with an `user`
- * @returns The hashed password
+ * @returns The hashed password as a string in base64
  */
 export const _hash = (password: string, salt: string) => {
-    return crypto.pbkdf2Sync(password, salt, 420, 512, "sha512")
+    return crypto.pbkdf2Sync(password, salt, 420, 512, "sha512").toString("base64");
 }
 
 /**
