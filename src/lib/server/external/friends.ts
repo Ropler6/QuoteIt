@@ -1,3 +1,4 @@
+import type { User_T } from "$lib/datatypes";
 import { _addFriendRequest, _addFriendship, _getFriendRequest, _getFriends, _getIncomingFriendRequests, _removeFriendRequest } from "../internal/friends";
 import { _getUserByName } from "../internal/utils"
 
@@ -63,5 +64,13 @@ export const getFriends = async (username: string) => {
     const user = await _getUserByName(username);
     if (!user) return null;
 
-    return await _getFriends(user.id);
+    const friends = await _getFriends(user.id);
+    if (!friends) return [];
+
+    return friends.map(x => {
+        return {
+            name: x.name,
+            createdAt: x.createdAt,
+        };
+    }) as User_T[];
 }

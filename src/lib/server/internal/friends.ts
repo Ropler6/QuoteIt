@@ -1,4 +1,4 @@
-import type { FriendRequest_T, Friendship_T, IncomingFriendRequest_T, User_T } from "$lib/datatypes";
+import type { DBUser_T, FriendRequest_T, Friendship_T, IncomingFriendRequest_T } from "$lib/datatypes";
 import { supabase } from "./supabase"
 
 /**
@@ -99,11 +99,11 @@ export const _getFriendRequest = async (userId1: number, userId2: number) => {
 export const _getFriends = async (userId: number) => {
     const [response1, response2] = await Promise.all([
         supabase.from("Friendships")
-                .select("userId2(name, createdAt)")
+                .select("userId2(*)")
                 .eq("userId1", userId),
 
         supabase.from("Friendships")
-                .select("userId1(name, createdAt)")
+                .select("userId1(*)")
                 .eq("userId2", userId),
     ]);
 
@@ -111,5 +111,5 @@ export const _getFriends = async (userId: number) => {
     const arr1 = response2.data.map(x => x.userId1);
     const arr2 = response1.data.map(x => x.userId2);
     
-    return (arr2.concat(arr1) as unknown[]) as User_T[];
+    return (arr2.concat(arr1) as unknown[]) as DBUser_T[];
 }
