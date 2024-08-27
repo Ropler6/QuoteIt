@@ -1,5 +1,5 @@
 import { supabase, type Table_T } from "./supabase";
-import type { User_T } from "$lib/datatypes";
+import type { DBUser_T } from "$lib/datatypes";
 
 /**
  * Internal function for fetching an `user` from the database
@@ -15,7 +15,7 @@ export const _getUserByName = async (name: string) => {
 
     if (error) return null;
     if (data === null || !data[0]) return null;
-    return data[0] as User_T;
+    return data[0] as DBUser_T;
 }
 
 /**
