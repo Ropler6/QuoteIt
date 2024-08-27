@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import type { Quote_T, QuoteMention_T, User_T } from "$lib/datatypes";
+import type { DBUser_T, Quote_T, QuoteMention_T } from "$lib/datatypes";
 
 /**
  * Internal function for adding a quote to the database
@@ -116,11 +116,11 @@ export const _getQuotesVisibleToUser = async (userId: number, limit = 50) => {
 export const _getMentions = async (quoteId: number) => {
     const { data, error } = await supabase
         .from("QuoteMentions")
-        .select("user: userId(name, createdAt)")
+        .select("user: userId(*)")
         .eq("quoteId", quoteId);
 
     if (error) return null;
-    return (data as any[]).map(x => x.user) as User_T[];
+    return (data as any[]).map(x => x.user) as DBUser_T[];
 }
 
 /**
