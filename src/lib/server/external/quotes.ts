@@ -1,5 +1,5 @@
 import { _getFromId, _getUserByName } from "../internal/utils";
-import { _getQuotesFromUser, _addQuote, _addQuoteMentions, _getQuotesVisibleToUser, _removeSingleQuote, _getMentions } from "../internal/quotes";
+import { _getQuotesFromUser, _addQuote, _addQuoteMentions, _getQuotesVisibleToUser, _removeSingleQuote, _getMentions, _countQuotes, _countTags, _countMentions } from "../internal/quotes";
 import { arrayIntersection, arrayUnion } from "$lib/utils";
 import type { Quote_T } from "$lib/datatypes";
 import { _getFriends } from "../internal/friends";
@@ -82,4 +82,24 @@ export const addQuote = async (creatorName: string, mentionedName: string[], tex
 
     const mentions = await _addQuoteMentions(mentioned.map(x => x.id).concat(creator.id), quote.id);
     return { quote, mentions };
+}
+
+/**
+ * Fetches relevant data about the user and their activity on the app
+ * @param username The name of the `user`
+ * @returns The number of `quote`s, `tag`s and `mention`s associated with the `user`
+ */
+export const getDataForUser = async (username: string) => {
+    const user = await _getUserByName(username);
+    if (!user) return null;
+
+    const [quoteCount, tagCount, mentionCount] = await Promise.all([
+        _countQuotes(user.id), _countTags(user.id), _countMentions(user.id)
+    ]);
+
+    return {
+        quotes: quoteCount,
+        tags: tagCount,
+        mentions: mentionCount
+    };
 }
