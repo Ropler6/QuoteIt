@@ -8,18 +8,19 @@
     const successMsg = "Friend request sent"
     
     const sendFriendRequest = async () => {
-        const success = await fetch(`/api/users/friend-requests`, {
+        const response = await fetch(`/api/users/friend-requests`, {
             method: "POST",
             body: JSON.stringify(friendName),
         });
+
+        const success = await response.json();
+        if (success) notifMsg = successMsg;
+        else notifMsg = errorMsg;
 
         notifVisible = true;
         setTimeout(() => {
             notifVisible = false;
         }, 5000);
-
-        if (success) notifMsg = successMsg;
-        else notifMsg = errorMsg;
     }
 </script>
 
