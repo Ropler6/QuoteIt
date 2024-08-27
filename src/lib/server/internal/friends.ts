@@ -99,11 +99,11 @@ export const _getFriendRequest = async (userId1: number, userId2: number) => {
 export const _getFriends = async (userId: number) => {
     const [response1, response2] = await Promise.all([
         supabase.from("Friendships")
-                .select("userId2(*)")
+                .select("userId2(name, createdAt)")
                 .eq("userId1", userId),
 
         supabase.from("Friendships")
-                .select("userId1(*)")
+                .select("userId1(name, createdAt)")
                 .eq("userId2", userId),
     ]);
 
