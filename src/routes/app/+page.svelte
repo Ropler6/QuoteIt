@@ -43,8 +43,6 @@
         <div class="quotes">
             {#if form?.success}
                 <Notification text={"Quote added successfully to the database!"}/>
-            {:else}
-                <Notification text={"Could not add the quote!"}/>
             {/if}
             {#if quoteDeleted}
                 <Notification text={"Quote was deleted successfully!"}/>
