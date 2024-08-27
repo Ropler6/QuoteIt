@@ -116,7 +116,7 @@ export const _getQuotesVisibleToUser = async (userId: number, limit = 50) => {
 export const _getMentions = async (quoteId: number) => {
     const { data, error } = await supabase
         .from("QuoteMentions")
-        .select("user: userId(*)")
+        .select("user: userId(name, createdAt)")
         .eq("quoteId", quoteId);
 
     if (error) return null;
