@@ -71,9 +71,11 @@ export const addQuote = async (creatorName: string, mentionedName: string[], tex
     if (!creator || !possibleMentioned) return null;
 
     const mentioned = possibleMentioned.filter(x => x !== null);
+    if (mentioned.length !== possibleMentioned.length) return null; //some users do not exist
+
     const friends = await _getFriends(creator.id);
-    
     if (!friends) return null;
+
     //if at least one of the mentioned users isnt a friend, return null
     if (arrayIntersection(mentioned, friends, (x, y) => x.id === y.id).length !== mentioned.length) return null;
 
