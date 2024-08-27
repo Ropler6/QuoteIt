@@ -122,3 +122,48 @@ export const _getMentions = async (quoteId: number) => {
     if (error) return null;
     return (data as any[]).map(x => x.user) as User_T[];
 }
+
+/**
+ * Internal function for counting the amount of `quote`s an `user` has in the database
+ * @param userId The ID of the `user`
+ * @returns The amount of `quote`s
+ */
+export const _countQuotes = async (userId: number) => {
+    const { data, error } = await supabase
+        .from("Quotes")
+        .select("count", { count: "estimated" })
+        .eq("creatorId", userId);
+
+    if (error) return null;
+    return (data[0].count as unknown) as number;
+}
+
+/**
+ * Internal function for counting the amount of `tag`s an `user` is a member of
+ * @param userId The ID of the `user`
+ * @returns The amount of `tag`s
+ */
+export const _countTags = async (userId: number) => {
+    const { data, error } = await supabase
+        .from("TagMemberships")
+        .select("count", { count: "estimated" })
+        .eq("userId", userId);
+
+    if (error) return null;
+    return (data[0].count as unknown) as number;
+}
+
+/**
+ * Internal function for counting the amount of `mention`s an `user` has
+ * @param userId The ID of the `user`
+ * @returns The amount of `mention`s
+ */
+export const _countMentions = async (userId: number) => {
+    const { data, error } = await supabase
+        .from("QuoteMentions")
+        .select("count", { count: "estimated" })
+        .eq("userId", userId);
+
+    if (error) return null;
+    return (data[0].count as unknown) as number;
+}
