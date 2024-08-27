@@ -1,8 +1,11 @@
 
 export interface User_T {
-    id: number;
     name: string;
     createdAt: string;
+}
+
+export interface DBUser_T extends User_T {
+    id: number;
     password: string;
 }
 
