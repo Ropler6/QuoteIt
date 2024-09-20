@@ -6,6 +6,7 @@
     import Notification from "$lib/components/Notification.svelte";
     import type { Tag_T } from "$lib/datatypes";
     import { browser } from "$app/environment";
+    import "/src/style.css"
 
     export let form: ActionData;
     export let data: PageData;

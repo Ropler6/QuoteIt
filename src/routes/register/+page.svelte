@@ -3,6 +3,7 @@
     import Header from "$lib/components/Header.svelte"
     import { browser } from "$app/environment";
     import Notification from "$lib/components/Notification.svelte";
+    import "/src/style.css"
 
     let diffPasswords = false;
     let userExists = true;

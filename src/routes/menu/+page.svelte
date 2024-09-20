@@ -5,9 +5,9 @@
     import FriendsManager from "$lib/components/FriendsManager.svelte";
     import User from "$lib/components/User.svelte";
     import type { ActionData, PageData } from "./$types";
-    import "/src/style.css"
     import { goto } from "$app/navigation";
     import { browser } from "$app/environment";
+    import "/src/style.css"
 
     export let data: PageData;
     export let form: ActionData;

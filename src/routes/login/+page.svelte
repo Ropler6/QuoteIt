@@ -4,6 +4,7 @@
     import type { ActionData } from "./$types";
     import { browser } from "$app/environment";
     import Notification from "$lib/components/Notification.svelte";
+    import "/src/style.css"
 
     export let form: ActionData;
     if (form?.success)

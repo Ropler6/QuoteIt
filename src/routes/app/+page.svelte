@@ -7,6 +7,7 @@
     import Notification from "$lib/components/Notification.svelte";
     import { flip } from "svelte/animate";
     import { quintInOut } from "svelte/easing";
+    import "/src/style.css"
 
     export let form: ActionData;
     export let data: PageData;
