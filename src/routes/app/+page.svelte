@@ -102,4 +102,14 @@
         grid-column: 1 / 3;
         align-self: center;
     }
+
+    input, textarea {
+        width: 100%;
+        margin: var(--size-s) 0;
+    }
+
+    textarea {
+        height: var(--size-xxl);
+    }
+
 </style>
