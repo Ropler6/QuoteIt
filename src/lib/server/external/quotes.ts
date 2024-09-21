@@ -63,6 +63,11 @@ export const getMentions = async (username: string, quoteId: number) => {
  * @returns 
  */
 export const addQuote = async (creatorName: string, mentionedName: string[], text: string) => {
+    
+    //remove extra spaces from names && remove null values/empty strings
+    mentionedName = mentionedName.filter(x => x.length > 0 && x !== null)
+                                 .map(x => x.trim());
+    
     const [creator, possibleMentioned] = await Promise.all([
         _getUserByName(creatorName),
         Promise.all(mentionedName.map(name => _getUserByName(name))),
@@ -73,17 +78,27 @@ export const addQuote = async (creatorName: string, mentionedName: string[], tex
     const mentioned = possibleMentioned.filter(x => x !== null);
     if (mentioned.length !== possibleMentioned.length) return null; //some users do not exist
 
-    const friends = await _getFriends(creator.id);
-    if (!friends) return null;
 
-    //if at least one of the mentioned users isnt a friend, return null
-    if (arrayIntersection(mentioned, friends, (x, y) => x.id === y.id).length !== mentioned.length) return null;
+    if (mentioned.length > 0) { //quote with mentions
+        const friends = await _getFriends(creator.id);
+        if (!friends) return null; //no friends => no users to mention
+    
+        //if at least one of the mentioned users isnt a friend, return null
+        if (arrayIntersection(mentioned, friends, (x, y) => x.id === y.id).length !== mentioned.length) return null;
+    
+        const quote = await _addQuote(creator.id, text);
+        if (!quote) return null;
+    
+        const mentions = await _addQuoteMentions(mentioned.map(x => x.id).concat(creator.id), quote.id);
+        return { quote, mentions };
+    }
+    else { //solo quote
+        const quote = await _addQuote(creator.id, text);
+        if (!quote) return null;
+        const mentions = await _addQuoteMentions([creator.id], quote.id);
 
-    const quote = await _addQuote(creator.id, text);
-    if (!quote) return null;
-
-    const mentions = await _addQuoteMentions(mentioned.map(x => x.id).concat(creator.id), quote.id);
-    return { quote, mentions };
+        return { quote, mentions };
+    }
 }
 
 /**
