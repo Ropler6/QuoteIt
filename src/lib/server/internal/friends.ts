@@ -56,6 +56,38 @@ export const _addFriendship = async (userId1: number, userId2: number) => {
 }
 
 /**
+ * Internal function for fetching a `friendship` between two `user`s
+ * @param userId1 The ID of one `user`
+ * @param userId2 The ID of the other `user`
+ * @returns The `friendship` object
+ */
+export const _getFriendship = async (userId1: number, userId2: number) => {
+    const { data, error } = await supabase
+    .from("Friendships")
+    .select("*")
+    .in("userId1", [userId1, userId2])
+    .in("userId2", [userId1, userId2])
+
+    if (error) return null;
+    return data[0] as Friendship_T;
+}
+
+/**
+ * Internal function for removing friend requests from the database
+ * @param friendshipId The ID of the `friendship`
+ * @returns `true` if the `friendship` was removed, `false` otherwise
+ */
+export const _removeFriendship = async (friendshipId: number) => {
+    const { data, error } = await supabase
+    .from("Friendships")
+    .delete()
+    .eq("id", friendshipId)
+
+    if (error) return false;
+    return true;
+}
+
+/**
  * Internal function for fetching the incoming friend requests for an `user
  * @param userId The ID of the `user`
  * @returns The incoming friend requests as an array of `IncomingFriendRequest_T`

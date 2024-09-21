@@ -1,5 +1,5 @@
 import type { User_T } from "$lib/datatypes";
-import { _addFriendRequest, _addFriendship, _getFriendRequest, _getFriends, _getIncomingFriendRequests, _removeFriendRequest } from "../internal/friends";
+import { _addFriendRequest, _addFriendship, _getFriendRequest, _getFriends, _getFriendship, _getIncomingFriendRequests, _removeFriendRequest, _removeFriendship } from "../internal/friends";
 import { _getUserByName } from "../internal/utils"
 
 /**
@@ -32,6 +32,22 @@ export const addFriendship = async (username1: string, username2: string) => {
 
     _removeFriendRequest(request.id);
     return await _addFriendship(user1.id, user2.id);
+}
+
+/**
+ * Removes a `friendship` between two `user`s from the database
+ * @param username1 The name of one `user`
+ * @param username2 The name of the other `user`
+ * @returns `true` if the operation was successful, `false` otherwise
+ */
+export const removeFriendship = async (username1: string, username2: string) => {
+    const [user1, user2] = await Promise.all([_getUserByName(username1), _getUserByName(username2)]);
+    if (!user1 || !user2) return false;
+
+    const friendship = await _getFriendship(user1.id, user2.id);
+    if (!friendship) return false;
+
+    return await _removeFriendship(friendship.id);
 }
 
 /**
