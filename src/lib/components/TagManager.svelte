@@ -54,12 +54,15 @@
 
 <main>
     {#if owned && addingTags}
+        <h3>Available tags:</h3>    
         {#each availableTags as tag}
-            <button on:click={() => addTagToQuote(tag)}>
-                <Tag showHash={false} tag={tag}/>
-            </button>
+        <div class="tag">
+            <Tag showHash={false} tag={tag}/>
+            <button class="tag-button" on:click={() => addTagToQuote(tag)}>+</button>
+        </div>
         {/each}
     {/if}
+    <br>
     
     <h3>Tags:</h3>
     {#each quoteTags as tag}
@@ -92,5 +95,9 @@
         color: var(--accent-colour);
         display: inline-block;
         margin: var(--size-xxs);
+    }
+
+    .tag-button {
+        padding: var(--size-xs);
     }
 </style>
