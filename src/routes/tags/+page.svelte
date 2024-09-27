@@ -34,10 +34,8 @@
         <div class="create">
             <h2>Create a tag:</h2>
             <form method="POST" action="?/createTag">
-                <label for="tagName">
-                    Tag name:
-                    <input type="text" name="tagName">
-                </label>
+                <label for="tagName">Tag name:</label>
+                <input type="text" name="tagName">
                 <button type="submit">Create</button>
             </form>
             {#if form?.success}
@@ -48,10 +46,8 @@
         <div class="join">
             <h2>Join a tag:</h2>
             <form method="POST" action="?/joinTag">
-                <label for="tagHash">
-                    Tag hash:
-                    <input type="text" name="tagHash">
-                </label>
+                <label for="tagHash">Tag hash:</label>
+                <input type="text" name="tagHash">
         
                 <button type="submit">Join</button>
             </form>
@@ -81,5 +77,9 @@
         display: flex;
         flex-direction: column;
         padding: var(--size-l);
+    }
+    
+    label {
+        margin: var(--size-xs);
     }
 </style>
