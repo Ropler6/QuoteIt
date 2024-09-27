@@ -24,9 +24,11 @@
     }
 </script>
 
-<label for="friendName">Username:</label>
-<input bind:value={friendName} type="text">
-<button on:click={sendFriendRequest}>Send friend request</button>
+<div>
+    <label for="friendName">Username:</label>
+    <input bind:value={friendName} type="text">
+    <button on:click={sendFriendRequest}>Send friend request</button>
+</div>
 
 {#if notifVisible}
     <Notification text={notifMsg}/>
@@ -36,6 +38,6 @@
 <style>
     label {
         font-size: var(--size-l);
-        margin: 0;
+        margin: var(--size-xs);
     }
 </style>

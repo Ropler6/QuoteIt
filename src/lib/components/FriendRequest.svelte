@@ -7,6 +7,17 @@
     const requestDate = new Date(incomingFriendRequest.createdAt);
 </script>
 
+<div>
+    <User user={incomingFriendRequest.user}/>
+    <p style:font-size="1.25em">({elapsedTimeString(requestDate)})</p>
+</div>
 
-<User user={incomingFriendRequest.user}/>
-<p>{elapsedTimeString(requestDate)}</p>
+
+<style>
+    div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: .5em;
+    }
+</style>
