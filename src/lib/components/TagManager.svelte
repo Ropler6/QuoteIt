@@ -4,9 +4,9 @@
     import Tag from "./Tag.svelte";
     import { createEventDispatcher, onMount } from "svelte";
 
-    export let user: User_T;
     export let quote: Quote_T;
     export let quoteTags: Tag_T[] = [];
+    export let owned: boolean = false;
 
     let userTags: Tag_T[] = [];
     const dispatch = createEventDispatcher();
@@ -53,7 +53,7 @@
 </script>
 
 <main>
-    {#if user.id === quote.creatorId && addingTags}
+    {#if owned && addingTags}
         {#each availableTags as tag}
             <button on:click={() => addTagToQuote(tag)}>
                 <Tag showHash={false} tag={tag}/>
@@ -65,13 +65,13 @@
     {#each quoteTags as tag}
         <div class="tag">
             <Tag showHash={false} tag={tag} />
-            {#if user.id === quote.creatorId}
+            {#if owned}
                 <button on:click={() => removeTagFromQuote(tag)}>X</button>
             {/if}
         </div>
     {/each}
     
-    {#if user.id === quote.creatorId}
+    {#if owned}
         <button on:click={() => addingTags = !addingTags}>+</button>
     {/if}
 </main>

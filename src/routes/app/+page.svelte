@@ -50,7 +50,7 @@
             {/if}
             {#each data.quotes as quoteData (quoteData)}
                 <div style:width="100%" animate:flip={{ duration: 1500, easing: quintInOut }}>
-                    <Quote user={data.user} quote={quoteData.quote} owned={quoteData.owned} on:destroy={onQuoteDelete}/>
+                    <Quote quote={quoteData.quote} owned={quoteData.owned} on:destroy={onQuoteDelete}/>
                 </div>
             {/each}
         </div>

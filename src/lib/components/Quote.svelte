@@ -8,7 +8,6 @@
     import { quadInOut } from "svelte/easing";
 
     export let quote: Quote_T; //the quote object
-    export let user: User_T; //the user currently viewing the quote
     export let owned: boolean = false; //whether the current user owns the quote or not
     
     let quoteTags: Tag_T[] = [];
@@ -55,7 +54,7 @@
     <!-- List of added/possible tags -->
     {#if toggled}
         <div transition:fly={{ x: "-50%" }} class="details">
-            <TagManager user={user} quote={quote} quoteTags={quoteTags} on:addTag={addTag} on:removeTag={removeTag}/>
+            <TagManager quote={quote} quoteTags={quoteTags} owned={owned} on:addTag={addTag} on:removeTag={removeTag}/>
             <Mentions quote={quote}/>
             <p class="created-at">Created at: {new Date(quote.createdAt).toDateString()}</p>
         </div>
