@@ -55,33 +55,30 @@
             {/each}
         </div>
     {:else}
-        <Notification text={"Could not fetch quotes!"}/>
+        <div class="quotes">
+            <Notification text={"Could not fetch quotes!"}/>
+        </div>
     {/if}
 </main>
 
 
 <style>
     main {
-        display: grid;
-        grid-template-columns: 2fr 2fr 2fr;
-        grid-template-rows: 1fr 9fr;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
     .quotes {
         display: flex;
+        height: fit-content;
+        width: max(20em, 33vw);
         flex-direction: column;
-        align-items: center;
-        grid-column: 2 / 3;
-        grid-row: 2 / 3;
     }
 
     form {
         display: grid;
-        align-self: center;
-        justify-self: center;
-        width: 100%;
-        grid-row: 1 / 2;
-        grid-column: 2 / 3;
+        width: max(20em, 33vw);
         grid-template-columns: 1fr 2fr;
         grid-template-rows: 2fr 1fr 1fr 1fr;
     }
@@ -91,7 +88,8 @@
     }
 
     .submit {
-        width: 10em;
+        width: 7.5em;
+        height: 3em;
         font-size: var(--size-m);
         justify-self: center;
     }
