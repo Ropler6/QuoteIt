@@ -22,7 +22,7 @@
         <input type="text" name="username">
         
         <label for="password">Password:</label>
-        <input type="text" name="password">
+        <input type="password" name="password">
         
         <button type="submit">Submit</button>
     </form>
