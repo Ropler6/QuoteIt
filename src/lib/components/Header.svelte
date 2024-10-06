@@ -9,7 +9,7 @@
 
 <main>
     <div class="title">
-        QUOTES
+        QuoteIt
     </div>
 
     <div class="links">
